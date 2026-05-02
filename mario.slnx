@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="mario.vcxproj" />
+  <Project Path="mario.vcxproj" Id="42e46be2-bf72-465f-b249-cf9f9ebbe964" />
 </Solution>
