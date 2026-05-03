@@ -1,0 +1,11 @@
+# list of object assets to load in this scene
+[ASSETS]
+
+brick.txt
+
+#
+[OBJECTS]
+# type 0: brick
+
+# type	x	y	row	col
+0 	0	270	3	100

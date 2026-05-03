@@ -1,0 +1,14 @@
+[SETTINGS]
+start	1
+width	520
+height	340
+
+#id	type	file
+# type: 0: intro, 1: play scene 
+[SCENES]
+0	intro.txt
+1	scene01.txt
+
+# id	file 
+[TEXTURES]
+0	SMB_Ground.png

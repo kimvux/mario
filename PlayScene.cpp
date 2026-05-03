@@ -6,6 +6,7 @@
 #include "Textures.h"
 #include "Sprites.h"
 #include "debug.h"
+#include "Brick.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -97,13 +98,22 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	int object_type = atoi(tokens[0].c_str());
 	float x = (float)atof(tokens[1].c_str());
 	float y = (float)atof(tokens[2].c_str());
-
-	CGameObject* obj = NULL;
-
+	int row = atoi(tokens[3].c_str());
+	int col = atoi(tokens[4].c_str());
+	
+	
+	//load
 	switch (object_type)
 	{
-	
-	break;
+	case 0:
+	{
+		for (int i = 0; i < row; ++i) {
+			for (int j = 0; j < col; ++j) {
+				CGameObject* obj = new Brick(x + j * BRICK_BBOX_HEIGHT, y + i * BRICK_BBOX_WIDTH);
+				objects.push_back(obj);
+			}
+		}
+	} break;
 
 
 	default:
@@ -112,10 +122,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 
 	// General object setup
-	obj->SetPosition(x, y);
-
-
-	objects.push_back(obj);
+	
 }
 
 void CPlayScene::LoadAssets(LPCWSTR assetFile)

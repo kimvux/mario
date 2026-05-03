@@ -17,12 +17,43 @@
 
 #define BACKGROUND_COLOR D3DXCOLOR(200.0f/255, 200.0f/255, 255.0f/255, 0.0f)
 
-#define SCREEN_WIDTH 320
-#define SCREEN_HEIGHT 240
+#define SCREEN_WIDTH 620
+#define SCREEN_HEIGHT 340
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message) {
+	case WM_GETMINMAXINFO:
+	{
+		MINMAXINFO* pMinMaxInfo = (MINMAXINFO*)lParam;
+
+		// Thiết lập kích thước tối thiểu
+		pMinMaxInfo->ptMinTrackSize.x = SCREEN_WIDTH/2;
+		pMinMaxInfo->ptMinTrackSize.y = SCREEN_HEIGHT / 2;
+		return 0;
+	}
+	case WM_SIZING:
+	{
+		RECT* pRect = (RECT*)lParam;
+		int width = pRect->right - pRect->left;
+		int height = pRect->bottom - pRect->top;
+
+		// Tính toán chiều cao dựa trên chiều rộng để giữ tỉ lệ
+		int newHeight = (width * SCREEN_HEIGHT) / SCREEN_WIDTH;
+
+		// Cập nhật hình chữ nhật dựa trên cạnh đang được kéo
+		if (wParam == WMSZ_RIGHT || wParam == WMSZ_TOPRIGHT || wParam == WMSZ_BOTTOMRIGHT  )
+		{
+			pRect->bottom = pRect->top + newHeight;
+		}
+		else if (wParam == WMSZ_BOTTOM || wParam == WMSZ_BOTTOMLEFT || wParam == WMSZ_TOPLEFT || wParam == WMSZ_LEFT || wParam == WMSZ_TOP)
+		{
+			pRect->right = pRect->left + width;
+			pRect->bottom = pRect->top + newHeight;
+		}
+
+		return TRUE;
+	}
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
@@ -39,7 +70,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 */
 void Update(DWORD dt)
 {
-	//CGame::GetInstance()->GetCurrentScene()->Update(dt);
+	CGame::GetInstance()->GetCurrentScene()->Update(dt);
 }
 
 /*
@@ -61,7 +92,7 @@ void Render()
 	FLOAT NewBlendFactor[4] = { 0,0,0,0 };
 	pD3DDevice->OMSetBlendState(g->GetAlphaBlending(), NewBlendFactor, 0xffffffff);
 
-	//CGame::GetInstance()->GetCurrentScene()->Render();
+	CGame::GetInstance()->GetCurrentScene()->Render();
 
 	spriteHandler->End();
 	pSwapChain->Present(0, 0);
@@ -170,7 +201,7 @@ int WINAPI WinMain(
 
 
 	//IMPORTANT: this is the only place where a hardcoded file name is allowed ! 
-	game->Load(L"mario-sample.txt");
+	game->Load(L"setup.txt");
 
 	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 
