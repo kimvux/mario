@@ -1,0 +1,5 @@
+C:\D\Game making class\mar\x64\Debug\D3DCompiler_43.dll
+C:\D\Game making class\mar\x64\Debug\d3dx9d_43.dll
+C:\D\Game making class\mar\x64\Debug\d3dx10d_43.dll
+C:\D\Game making class\mar\x64\Debug\d3dx11d_43.dll
+C:\D\Game making class\mar\05-SceneManager\x64\Debug\05-Scene.A734FDAD.Up2Date
