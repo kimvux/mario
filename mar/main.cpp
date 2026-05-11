@@ -49,12 +49,41 @@ HOW TO INSTALL Microsoft.DXSDK.D3DX
 
 #define BACKGROUND_COLOR D3DXCOLOR(200.0f/255, 200.0f/255, 255.0f/255, 0.0f)
 
-#define SCREEN_WIDTH 320
-#define SCREEN_HEIGHT 240
+#define SCREEN_WIDTH 720
+#define SCREEN_HEIGHT 450
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message) {
+	case WM_GETMINMAXINFO:
+	{
+		MINMAXINFO* pMinMaxInfo = (MINMAXINFO*)lParam;
+
+		pMinMaxInfo->ptMinTrackSize.x = SCREEN_WIDTH / 2;
+		pMinMaxInfo->ptMinTrackSize.y = SCREEN_HEIGHT / 2;
+		return 0;
+	}
+	case WM_SIZING:
+	{
+		RECT* pRect = (RECT*)lParam;
+		int width = pRect->right - pRect->left;
+		int height = pRect->bottom - pRect->top;
+
+
+		int newHeight = (width * SCREEN_HEIGHT) / SCREEN_WIDTH;
+
+		if (wParam == WMSZ_RIGHT || wParam == WMSZ_TOPRIGHT || wParam == WMSZ_BOTTOMRIGHT)
+		{
+			pRect->bottom = pRect->top + newHeight;
+		}
+		else if (wParam == WMSZ_BOTTOM || wParam == WMSZ_BOTTOMLEFT || wParam == WMSZ_TOPLEFT || wParam == WMSZ_LEFT || wParam == WMSZ_TOP)
+		{
+			pRect->right = pRect->left + width;
+			pRect->bottom = pRect->top + newHeight;
+		}
+
+		return TRUE;
+	}
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;

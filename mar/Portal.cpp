@@ -29,7 +29,7 @@ void CPortal::RenderBoundingBox()
 	float cx, cy;
 	CGame::GetInstance()->GetCamPos(cx, cy);
 
-	CGame::GetInstance()->Draw(x - cx, y - cy, bbox, nullptr, BBOX_ALPHA, rect.right - 1, rect.bottom - 1);
+	CGame::GetInstance()->Draw(x - cx, y - cy, bbox, nullptr, rect.right - 1, rect.bottom - 1);
 }
 
 void CPortal::Render()

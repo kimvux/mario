@@ -25,25 +25,28 @@ void CPlatform::RenderBoundingBox()
 	CGame::GetInstance()->GetCamPos(cx, cy);
 
 	float xx = x - this->cellWidth / 2 + rect.right / 2;
+	float yy = y - this->cellHeight / 2 + rect.bottom / 2;
 
-	CGame::GetInstance()->Draw(xx - cx, y - cy, bbox, nullptr, BBOX_ALPHA, rect.right - 1, rect.bottom - 1);
+	CGame::GetInstance()->Draw(xx - cx, yy - cy, bbox, nullptr, rect.right - 1, rect.bottom - 1);
 }
 
 void CPlatform::Render()
 {
-	if (this->length <= 0) return; 
+	if (this->length <= 0 || this->height <= 0) return; 
 	float xx = x; 
+	float yy = y;
 	CSprites * s = CSprites::GetInstance();
-
-	s->Get(this->spriteIdBegin)->Draw(xx, y);
-	xx += this->cellWidth;
-	for (int i = 1; i < this->length - 1; i++)
+	for (int j = 0; j < this->height ; j++)
 	{
-		s->Get(this->spriteIdMiddle)->Draw(xx, y);
-		xx += this->cellWidth;
+		for (int i = 0; i < this->length; i++)
+		{
+			s->Get(this->spriteId)->Draw(xx, yy);
+			xx += this->cellWidth;
+		}
+		yy += this->cellHeight;
+		xx = x;
 	}
-	if (length>1)
-		s->Get(this->spriteIdEnd)->Draw(xx, y);
+	
 
 	RenderBoundingBox();
 }

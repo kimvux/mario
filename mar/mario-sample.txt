@@ -1,5 +1,5 @@
 [SETTINGS]
-start	5
+start	1
 width	320
 height	240
 
@@ -17,3 +17,9 @@ height	240
 0	textures\mario.png
 10	textures\enemies.png
 20	textures\misc.png
+21	textures\Mario1\Tilesets\OverWorld.png
+22	textures\Free Pixel Art Forest\PNG\Background layers\Layer_0002_7.png
+23	textures\Free Pixel Art Forest\PNG\Background layers\Layer_0005_5.png
+24	textures\Free Pixel Art Forest\PNG\Background layers\Layer_0011_0.png
+25	textures\Free Pixel Art Forest\PNG\Background layers\Layer_0003_6.png
+26	textures\Free Pixel Art Forest\PNG\Background layers\Layer_0006_4.png

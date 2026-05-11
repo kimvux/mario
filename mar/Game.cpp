@@ -167,7 +167,7 @@ void CGame::SetPointSamplerState()
 	NOTE: This function is very inefficient because it has to convert
 	from texture to sprite every time we need to draw it
 */
-void CGame::Draw(float x, float y, LPTEXTURE tex, RECT* rect, float alpha, int sprite_width, int sprite_height)
+void CGame::Draw(float x, float y, LPTEXTURE tex, RECT* rect, int sprite_width, int sprite_height)
 {
 	if (tex == NULL) return;
 
@@ -207,9 +207,6 @@ void CGame::Draw(float x, float y, LPTEXTURE tex, RECT* rect, float alpha, int s
 	// Set the texture index. Single textures will use 0
 	sprite.TextureIndex = 0;
 
-	// The color to apply to this sprite, full color applies white.
-	//sprite.ColorModulate = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	sprite.ColorModulate = D3DXCOLOR(1.0f, 1.0f, 1.0f, alpha);
 
 
 	//

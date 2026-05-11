@@ -10,6 +10,7 @@
 #include "Coin.h"
 #include "Star.h"
 #include "Platform.h"
+#include "Background.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -52,7 +53,7 @@ void CPlayScene::_ParseSection_SPRITES(string line)
 		DebugOut(L"[ERROR] Texture ID %d not found!\n", texID);
 		return; 
 	}
-
+	DebugOut(L"[INFO] Loaded sprite ID %d, texture ID %d, rect: left=%d top=%d right=%d bottom=%d\n", ID, texID, l, t, r, b);
 	CSprites::GetInstance()->Add(ID, l, t, r, b, tex);
 }
 
@@ -84,7 +85,7 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 		int frame_time = atoi(tokens[i+1].c_str());
 		ani->Add(sprite_id, frame_time);
 	}
-
+	
 	CAnimations::GetInstance()->Add(ani_id, ani);
 }
 
@@ -118,7 +119,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
-	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
+	case OBJECT_TYPE_BRICK:
+	{
+		obj = new CBrick(x, y); 
+		break;
+	}
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 	case OBJECT_TYPE_STAR: obj = new CSTAR(x, y);break;
 
@@ -128,15 +133,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float cell_width = (float)atof(tokens[3].c_str());
 		float cell_height = (float)atof(tokens[4].c_str());
 		int length = atoi(tokens[5].c_str());
-		int sprite_begin = atoi(tokens[6].c_str());
-		int sprite_middle = atoi(tokens[7].c_str());
-		int sprite_end = atoi(tokens[8].c_str());
+		int height = atoi(tokens[6].c_str());
+		int sprite = atoi(tokens[7].c_str());
 
-		obj = new CPlatform(
-			x, y,
-			cell_width, cell_height, length,
-			sprite_begin, sprite_middle, sprite_end
-		);
+		obj = new CPlatform(x, y,cell_width, cell_height, length, height, sprite);
 
 		break;
 	}
@@ -150,6 +150,17 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	break;
 
+	case OBJECT_TYPE_BACKGROUND:
+	{
+		float z = (float)atof(tokens[3].c_str());
+		float cell_width = (float)atof(tokens[4].c_str());
+		float cell_height = (float)atof(tokens[5].c_str());
+		int length = atoi(tokens[6].c_str());
+		int height = atoi(tokens[7].c_str());
+		int id = atoi(tokens[8].c_str());
+		obj = new CBackground(x, y, z, cell_width, cell_height, length, height, id);
+		break;
+	}
 
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
