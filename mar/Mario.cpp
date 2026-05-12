@@ -8,15 +8,39 @@
 #include "Coin.h"
 #include "Portal.h"
 #include "Star.h"
+#include <Windows.h>
 
 #include "Collision.h"
 
+int jumpCount = 0;
+
+bool isDashing = false;
+DWORD dashStart = 0;
+int dashDirection = 0;
+
+const float dashSpeed = 0.45;
+const DWORD dashTime = 200;
+const DWORD dashCoolDown = 1000;
+
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-	vy += ay * dt;
-	vx += ax * dt;
+	if (isDashing) {
+		vx = dashDirection * dashSpeed;
+		vy = 0; 
 
-	if (abs(vx) > abs(maxVx)) vx = maxVx;
+		if (GetTickCount64() - dashStart > dashTime)
+		{
+			isDashing = false;
+			vx = vx / 2;
+		}
+	}
+	else {
+		vy += ay * dt;
+		vx += ax * dt;
+	}
+
+	if(!isDashing)
+		if (abs(vx) > abs(maxVx)) vx = maxVx;
 
 	// reset untouchable timer if untouchable time has passed
 	if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
@@ -40,7 +64,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (e->ny != 0 && e->obj->IsBlocking())
 	{
 		vy = 0;
-		if (e->ny < 0) isOnPlatform = true;
+		if (e->ny < 0){
+			isOnPlatform = true;
+			jumpCount = 0;
+		}
 	}
 	else 
 	if (e->nx != 0 && e->obj->IsBlocking())
@@ -60,6 +87,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
+	if(isDashing) return;
 	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 
 	// jump on top >> kill Goomba and deflect a bit 
@@ -287,11 +315,26 @@ void CMario::SetState(int state)
 		if (isSitting) break;
 		if (isOnPlatform)
 		{
-			if (abs(this->vx) == MARIO_RUNNING_SPEED)
-				vy = -MARIO_JUMP_RUN_SPEED_Y;
-			else
-				vy = -MARIO_JUMP_SPEED_Y;
+			jumpCount = 1; 
+			isOnPlatform = false; 
+			vy = (abs(this->vx) >= MARIO_RUNNING_SPEED) ? -MARIO_JUMP_RUN_SPEED_Y : -MARIO_JUMP_SPEED_Y;
 		}
+		
+		else if (jumpCount < 2)
+		{
+			jumpCount = 2; 
+			vy = (abs(this->vx) >= MARIO_RUNNING_SPEED) ? -MARIO_JUMP_RUN_SPEED_Y : -MARIO_JUMP_SPEED_Y;
+		}
+		break;
+
+	case MARIO_STATE_DASH:
+
+		if (isSitting || isDashing) break; 
+
+		isDashing = true;
+		dashStart = GetTickCount64();
+		if(nx == 0) dashDirection = 1;
+		else dashDirection= nx;
 		break;
 
 	case MARIO_STATE_RELEASE_JUMP:

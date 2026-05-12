@@ -13,10 +13,13 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 
 	switch (KeyCode)
 	{
+	case DIK_LSHIFT:
+		mario->SetState(MARIO_STATE_DASH);
+		break;
 	case DIK_DOWN:
 		mario->SetState(MARIO_STATE_SIT);
 		break;
-	case DIK_S:
+	case DIK_SPACE:
 		mario->SetState(MARIO_STATE_JUMP);
 		break;
 	case DIK_1:

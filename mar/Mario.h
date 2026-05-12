@@ -3,6 +3,7 @@
 
 #include "Animation.h"
 #include "Animations.h"
+#include <Windows.h>
 
 #include "debug.h"
 
@@ -32,6 +33,8 @@
 
 #define MARIO_STATE_SIT				600
 #define MARIO_STATE_SIT_RELEASE		601
+
+#define MARIO_STATE_DASH			650
 
 
 #pragma region ANIMATION_ID
