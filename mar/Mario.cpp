@@ -14,9 +14,7 @@
 
 int jumpCount = 0;
 
-bool isDashing = false;
 DWORD dashStart = 0;
-int dashDirection = 0;
 
 const float dashSpeed = 0.45;
 const DWORD dashTime = 200;

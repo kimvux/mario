@@ -12,23 +12,24 @@ bghill.txt
 # See OBJECT_TYPE constants in AssetIDs.h
 
 #Background layer 1
-#type	x	y	z	cw	ch	l	h	sprite
+#type	x	y	z	cw	ch	l	h	ani
 
 8	0	150	0	920	790	10	1	700006
 
-8	0	210	-1	927	269	10	1	700008
-8	0	210	-2	927	269	10	1	700005
+8	0	210	-2	927	269	10	1	700008
+8	0	210	-1	927	269	10	1	700005
 8	0	36	0	927	253	10	1	700004
 8	0	218	0	751	269	10	1	700007
 
-# MARIO
-# type	x	y
-0	20	10
+#Platform
+5	740	320	63	40	1	1	70009
+5	800	260	63	40	1	1	70009
 
 # BRICKS
-# type	x	y
-
-
+# type	x	y	col	row	w	h	ani
+1	740	288	10	1	16	16	10002
+1	740	303	10	3	16	16	10003
+1	450	335	1	1	16	16	10000
 
 
 #COIN
@@ -36,20 +37,28 @@ bghill.txt
 
 
 #Goomba
-2	300	10
+2	700	10
 
 #Platform
 #type	x	y	cw	ch	l	h	sprite
-5	0	350	16	16	1000	2	20001
-#
 
+
+5	520	320	63	40	2	1	70009
+
+
+5	360	320	49	40	1	1	70010
+
+#
+5	0	350	16	16	400	1	20002
 
 #Portal 
 
-
+# MARIO
+# type	x	y
+0	500	10
 
 
 #Background layer 2
-#type	x	y	z	cw	ch	l	h	sprite
-8	-100	390	15	927	253	5	1	700004
+#type	x	y	z	cw	ch	l	h	ani
+8	-100	390	3	927	253	5	1	700004
 

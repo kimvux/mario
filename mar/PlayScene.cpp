@@ -121,8 +121,20 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
 	case OBJECT_TYPE_BRICK:
 	{
-		obj = new CBrick(x, y); 
-		break;
+		int col = atoi(tokens[3].c_str());
+		int row = atoi(tokens[4].c_str());
+		float width = (float)atof(tokens[5].c_str());
+		float height = (float)atof(tokens[6].c_str());
+		int ani_id = atoi(tokens[7].c_str());
+		for (int i = 0; i < col; i++) {
+			for (int j = 0; j < row; j++) {
+				CGameObject* brick = new CBrick(x + i * width, y + j * height, width, height, ani_id);
+				objects.push_back(brick);
+			}
+		}
+
+				
+		return;
 	}
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 	case OBJECT_TYPE_STAR: obj = new CSTAR(x, y);break;

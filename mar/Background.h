@@ -14,15 +14,17 @@ protected:
 	float cellHeight;
 	int ani_id;
 	float z;
+	float scale;
 	float ax = 0.0f;
 public:
-	CBackground(float x, float y, float z, float cell_width, float cell_height, int length, int height, int ani_id) : CGameObject(x, y) { 
+	CBackground(float x, float y, float z, float cell_width, float cell_height, int length, int height, int ani_id, float scale = 1.0f) : CGameObject(x, y) { 
 		this->ani_id = ani_id;
 		this->z = z;
 		this->length = length;
 		this->height = height;
 		this->cellWidth = cell_width;
 		this->cellHeight = cell_height;
+		this->scale = scale;
 	}
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

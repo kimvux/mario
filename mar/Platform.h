@@ -1,7 +1,8 @@
 #pragma once
 
 #include "GameObject.h"
-
+#include "Animation.h"
+#include "Animations.h"
 // 
 // The most popular type of object in Mario! 
 // 
@@ -15,9 +16,7 @@ protected:
 	int spriteId;
 
 public:
-	CPlatform(float x, float y,
-		float cell_width, float cell_height, int length, int height,
-		int sprite_id) :CGameObject(x, y)
+	CPlatform(float x, float y, float cell_width, float cell_height, int length, int height, int sprite_id) :CGameObject(x, y)
 	{
 		this->length = length;
 		this->height = height;

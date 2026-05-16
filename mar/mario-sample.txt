@@ -23,3 +23,5 @@ height	240
 24	textures\Free Pixel Art Forest\PNG\Background layers\Layer_0011_0.png
 25	textures\Free Pixel Art Forest\PNG\Background layers\Layer_0003_6.png
 26	textures\Free Pixel Art Forest\PNG\Background layers\Layer_0006_4.png
+27	textures\Texture\TX Village Props.png
+28	textures\Texture\TX Tileset Ground.png

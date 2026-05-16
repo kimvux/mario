@@ -110,7 +110,6 @@ class CMario : public CGameObject
 	float maxVx;
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
-
 	int level; 
 	int untouchable; 
 	ULONGLONG untouchable_start;
@@ -157,4 +156,7 @@ public:
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	float getVx() { return vx; }
+	bool isDashing = false;
+	int dashDirection = 0;
 };
