@@ -11,6 +11,8 @@
 #include "Star.h"
 #include "Platform.h"
 #include "Background.h"
+#include "Bullet.h"
+#include "Turret.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -102,6 +104,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	int object_type = atoi(tokens[0].c_str());
 	float x = (float)atof(tokens[1].c_str());
 	float y = (float)atof(tokens[2].c_str());
+	
 
 	CGameObject *obj = NULL;
 
@@ -138,6 +141,29 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 	case OBJECT_TYPE_STAR: obj = new CSTAR(x, y);break;
+	case OBJECT_TYPE_TURRET:
+	{
+		
+
+		if (tokens.size() < 4) return; 
+
+		int dir = atoi(tokens[3].c_str());
+		obj = new CTurret(x, y, dir);
+
+		DebugOut(L"[INFO] Turret created at x=%f, y=%f with dir=%d\n", x, y, dir);
+		break;
+	}
+	case OBJECT_TYPE_BULLET:
+	{
+
+
+		if (tokens.size() < 4) return;
+
+		bool z = atoi(tokens[3].c_str());
+		obj = new CBullet(x, y, z);
+
+		break;
+	}
 
 	case OBJECT_TYPE_PLATFORM:
 	{
@@ -346,4 +372,8 @@ void CPlayScene::PurgeDeletedObjects()
 	objects.erase(
 		std::remove_if(objects.begin(), objects.end(), CPlayScene::IsGameObjectDeleted),
 		objects.end());
+}
+
+void CPlayScene::AddObject(LPGAMEOBJECT obj) {
+	objects.push_back(obj);
 }

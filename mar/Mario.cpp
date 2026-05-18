@@ -13,12 +13,13 @@
 #include "Collision.h"
 
 int jumpCount = 0;
+int dashCount = 0;
 
 DWORD dashStart = 0;
 
 const float dashSpeed = 0.45;
 const DWORD dashTime = 200;
-const DWORD dashCoolDown = 1000;
+const DWORD dashCoolDown = 2000;
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
@@ -65,6 +66,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		if (e->ny < 0){
 			isOnPlatform = true;
 			jumpCount = 0;
+			dashCount = 0;
 		}
 	}
 	else 
@@ -328,11 +330,13 @@ void CMario::SetState(int state)
 	case MARIO_STATE_DASH:
 
 		if (isSitting || isDashing) break; 
-
-		isDashing = true;
-		dashStart = GetTickCount64();
-		if(nx == 0) dashDirection = 1;
-		else dashDirection= nx;
+		if (dashCount < 1) {
+			dashCount++;
+			isDashing = true;
+			dashStart = GetTickCount64();
+			if (nx == 0) dashDirection = 1;
+			else dashDirection = nx;
+		}
 		break;
 
 	case MARIO_STATE_RELEASE_JUMP:
