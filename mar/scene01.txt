@@ -6,6 +6,8 @@ coin.txt
 goomba.txt
 cloud.txt
 bghill.txt
+bullet.txt
+turret.txt
 #
 
 [OBJECTS]
@@ -72,20 +74,11 @@ bghill.txt
 
 #Goomba
 2	700	10
-
-#breakable
-9	1000	250	1	1	44	44	10004
-
-# MARIO
-# type	x	y
-0	700	0
+2	600	8
 
 
-
-
-
-
-
+#Turret 
+12	700	100	3
 
 #Platform
 #type	x	y	cw	ch	l	h	sprite
@@ -103,6 +96,4 @@ bghill.txt
 
 #Background layer 2
 #type	x	y	z	cw	ch	l	h	ani
-8	-100	390	6	927	253	5	1	700004
-
-8	0	225	0	1001	451	10	1	700014
+8	-100	390	3	927	253	5	1	700004
