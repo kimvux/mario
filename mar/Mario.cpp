@@ -8,6 +8,7 @@
 #include "Coin.h"
 #include "Portal.h"
 #include "Star.h"
+#include "Brick.h"
 #include <Windows.h>
 
 #include "Collision.h"
@@ -65,6 +66,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		if (e->ny < 0){
 			isOnPlatform = true;
 			jumpCount = 0;
+		}
+		if (e->ny > 0) {
+			CBrick* br = dynamic_cast<CBrick*>(e->obj);
+			br->boundUp();
 		}
 	}
 	else 

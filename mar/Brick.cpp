@@ -14,3 +14,15 @@ void CBrick::GetBoundingBox(float &l, float &t, float &r, float &b)
 	r = l + width;
 	b = t + height;
 }
+void CBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
+	if (y >= defaultY) {
+		y = defaultY;
+		return;
+	}
+	y += 0.08 * dt;
+}
+void CBrick::boundUp() {
+	if (!boundtime) return;
+	boundtime--;
+	this->y -= height / 2;
+}

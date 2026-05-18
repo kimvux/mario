@@ -125,10 +125,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int row = atoi(tokens[4].c_str());
 		float width = (float)atof(tokens[5].c_str());
 		float height = (float)atof(tokens[6].c_str());
-		int ani_id = atoi(tokens[7].c_str());
+		int boundtime = atoi(tokens[7].c_str());
+		int ani_id = atoi(tokens[8].c_str());
 		for (int i = 0; i < col; i++) {
 			for (int j = 0; j < row; j++) {
-				CGameObject* brick = new CBrick(x + i * width, y + j * height, width, height, ani_id);
+				CGameObject* brick = new CBrick(x + i * width, y + j * height, width, height, boundtime, ani_id);
 				objects.push_back(brick);
 			}
 		}

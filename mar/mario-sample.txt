@@ -1,5 +1,5 @@
 [SETTINGS]
-start	1
+start	2
 width	320
 height	240
 
@@ -25,3 +25,6 @@ height	240
 26	textures\Free Pixel Art Forest\PNG\Background layers\Layer_0006_4.png
 27	textures\Texture\TX Village Props.png
 28	textures\Texture\TX Tileset Ground.png
+29	textures\Texture\lightnesslayer.png
+30	textures\png\Level_0__Tiles2_map1.png
+31	textures\png\Level_0__Tiles_map1.png
