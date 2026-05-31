@@ -8,10 +8,26 @@ void CCoin::Render()
 	//RenderBoundingBox();
 }
 
+void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
+	if (!isGetting) return;
+	if (y <= highY) {
+		vy = 0.2f;
+	}
+	else if (y >= lowY) {
+		this->isDeleted = true;
+	}
+	y += vy * dt;
+}
+
 void CCoin::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x - COIN_BBOX_WIDTH / 2;
 	t = y - COIN_BBOX_HEIGHT / 2;
 	r = l + COIN_BBOX_WIDTH;
 	b = t + COIN_BBOX_HEIGHT;
+}
+
+void CCoin::Delete() {
+	isGetting = true;
+	this->vy = -0.5f;
 }

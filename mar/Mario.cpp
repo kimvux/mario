@@ -127,6 +127,8 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
+	CCoin* coin = dynamic_cast<CCoin*>(e->obj);
+	if (coin->IsGetting()) return;
 	e->obj->Delete();
 	coin++;
 }

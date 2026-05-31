@@ -11,10 +11,16 @@
 #define COIN_BBOX_HEIGHT 16
 
 class CCoin : public CGameObject {
+protected:
+	float highY;
+	float lowY;
+	bool isGetting = false;
 public:
-	CCoin(float x, float y) : CGameObject(x, y) {}
+	CCoin(float x, float y) : CGameObject(x, y) { this->highY = y - 25; this->lowY = y + 1; }
 	void Render();
-	void Update(DWORD dt) {}
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	int IsBlocking() { return 0; }
+	void Delete();
+	bool IsGetting() { return isGetting; }
 };

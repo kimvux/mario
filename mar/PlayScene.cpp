@@ -140,7 +140,19 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 				
 		return;
 	}
-	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
+	case OBJECT_TYPE_COIN: {
+		int col = atoi(tokens[3].c_str());
+		int row = atoi(tokens[4].c_str());
+		float marginHorizontal = (float)atof(tokens[5].c_str());
+		float marginVertical = (float)atof(tokens[6].c_str());
+		for (int i = 0; i < col; i++) {
+			for (int j = 0; j < row; j++) {
+				CGameObject* coin = new CCoin(x + i * marginHorizontal, y + j * marginVertical);
+				objects.push_back(coin);
+			}
+		}
+		return;
+	}
 	case OBJECT_TYPE_STAR: obj = new CSTAR(x, y);break;
 	case OBJECT_TYPE_TURRET:
 	{
