@@ -20,7 +20,7 @@ HOW TO INSTALL Microsoft.DXSDK.D3DX
 
 
 ================================================================ */
-
+#include <windowsx.h>
 #include <windows.h>
 #include <d3d10.h>
 #include <d3dx10.h>
@@ -42,6 +42,8 @@ HOW TO INSTALL Microsoft.DXSDK.D3DX
 #include "SampleKeyEventHandler.h"
 
 #include "AssetIDs.h"
+
+#include "SoundManager.h"
 
 #define WINDOW_CLASS_NAME L"SampleWindow"
 #define MAIN_WINDOW_TITLE L"04 - Collision"
@@ -83,6 +85,10 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 
 		return TRUE;
+	}
+	case WM_LBUTTONDOWN: {
+		CGame::GetInstance()->InitiateSwitchScene(2);
+		return 0;
 	}
 	case WM_DESTROY:
 		PostQuitMessage(0);
@@ -226,6 +232,7 @@ int WINAPI WinMain(
 	SetDebugWindow(hWnd);
 
 	LPGAME game = CGame::GetInstance();
+	LPSOUNDMANAGER soundManager = SoundManager::GetInstance();
 	game->Init(hWnd, hInstance);
 	game->InitKeyboard();
 
@@ -234,7 +241,7 @@ int WINAPI WinMain(
 	game->Load(L"mario-sample.txt");  
 
 	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH * 1.5, SCREEN_HEIGHT * 1.5, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
-
+	soundManager->PlayMusic(L"maintheme");
 	Run();
 
 	return 0;

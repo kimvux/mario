@@ -10,6 +10,7 @@
 #include "Star.h"
 #include "Brick.h"
 #include <Windows.h>
+#include "SoundManager.h"
 
 #include "Collision.h"
 
@@ -24,6 +25,7 @@ const DWORD dashCoolDown = 2000;
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	if (!moveAble) return;
 	if (isDashing) {
 		vx = dashDirection * dashSpeed;
 		vy = 0; 
@@ -127,9 +129,10 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
-	CCoin* coin = dynamic_cast<CCoin*>(e->obj);
-	if (coin->IsGetting()) return;
+	CCoin* c = dynamic_cast<CCoin*>(e->obj);
+	if (c->IsGetting()) return;
 	e->obj->Delete();
+	SoundManager::GetInstance()->PlaySFX(L"coin");
 	coin++;
 }
 
@@ -325,12 +328,24 @@ void CMario::SetState(int state)
 			jumpCount = 1; 
 			isOnPlatform = false; 
 			vy = (abs(this->vx) >= MARIO_RUNNING_SPEED) ? -MARIO_JUMP_RUN_SPEED_Y : -MARIO_JUMP_SPEED_Y;
+			if (level == MARIO_LEVEL_SMALL) {
+				SoundManager::GetInstance()->PlaySFX(L"jumpsmall");
+			}
+			else {
+				SoundManager::GetInstance()->PlaySFX(L"jumpsuper");
+			}
 		}
 		
 		else if (jumpCount < 2)
 		{
 			jumpCount = 2; 
 			vy = (abs(this->vx) >= MARIO_RUNNING_SPEED) ? -MARIO_JUMP_RUN_SPEED_Y : -MARIO_JUMP_SPEED_Y;
+			if (level == MARIO_LEVEL_SMALL) {
+				SoundManager::GetInstance()->PlaySFX(L"jumpsmall");
+			}
+			else {
+				SoundManager::GetInstance()->PlaySFX(L"jumpsuper");
+			}
 		}
 		break;
 
@@ -341,6 +356,7 @@ void CMario::SetState(int state)
 			dashCount++;
 			isDashing = true;
 			dashStart = GetTickCount64();
+			SoundManager::GetInstance()->PlaySFX(L"dash");
 			if (nx == 0) dashDirection = 1;
 			else dashDirection = nx;
 		}

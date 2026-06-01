@@ -7,6 +7,7 @@
 #include "Texture.h"
 #include "Animations.h"
 #include "PlayScene.h"
+#include "SoundManager.h"
 
 CGame * CGame::__instance = NULL;
 
@@ -526,6 +527,7 @@ void CGame::SwitchScene()
 void CGame::InitiateSwitchScene(int scene_id)
 {
 	next_scene = scene_id;
+	SoundManager::GetInstance()->PlayMusic(to_wstring(scene_id));
 }
 
 

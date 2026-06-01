@@ -1,5 +1,5 @@
 [SETTINGS]
-start	1
+start	0
 width	320
 height	240
 
@@ -28,3 +28,4 @@ height	240
 29	textures\Texture\lightnesslayer.png
 30	textures\png\Level_0__Tiles2_map1.png
 31	textures\png\Level_0__Tiles_map1.png
+32	textures\png\intro.png
