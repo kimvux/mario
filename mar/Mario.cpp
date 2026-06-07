@@ -9,6 +9,7 @@
 #include "Portal.h"
 #include "Star.h"
 #include "Brick.h"
+#include "Bullet.h"
 #include <Windows.h>
 #include "SoundManager.h"
 
@@ -84,6 +85,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 
 	if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomba(e);
+	else if (dynamic_cast<CBullet*>(e->obj))
+		OnCollisionWithBullet(e);
 	else if (dynamic_cast<CCoin*>(e->obj))
 		OnCollisionWithCoin(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
@@ -123,6 +126,26 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 					SetState(MARIO_STATE_DIE);
 				}
 			}
+		}
+	}
+}
+
+void CMario::OnCollisionWithBullet(LPCOLLISIONEVENT e)
+{
+	if (isDashing) return;
+	CBullet* bullet = dynamic_cast<CBullet*>(e->obj);
+
+	if (untouchable == 0)
+	{
+		if (level > MARIO_LEVEL_SMALL)
+		{
+			level = MARIO_LEVEL_SMALL;
+			StartUntouchable();
+		}
+		else
+		{
+			DebugOut(L">>> Mario DIE >>> \n");
+			SetState(MARIO_STATE_DIE);
 		}
 	}
 }

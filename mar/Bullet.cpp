@@ -37,14 +37,7 @@ void CBullet::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CBullet*>(e->obj)) return;
 
-	if (e->ny != 0)
-	{
-		vy = 0;
-	}
-	else if (e->nx != 0)
-	{
-		vx = -vx;
-	}
+	
 }
 
 void CBullet :: Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
