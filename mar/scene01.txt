@@ -8,6 +8,7 @@ cloud.txt
 bghill.txt
 bullet.txt
 turret.txt
+flower.txt
 #
 
 [OBJECTS]

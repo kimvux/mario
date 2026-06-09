@@ -24,12 +24,12 @@ const float dashSpeed = 0.45;
 const DWORD dashTime = 200;
 const DWORD dashCoolDown = 2000;
 
-void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
+void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (!moveAble) return;
 	if (isDashing) {
 		vx = dashDirection * dashSpeed;
-		vy = 0; 
+		vy = 0;
 
 		if (GetTickCount64() - dashStart > dashTime)
 		{
@@ -42,11 +42,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		vx += ax * dt;
 	}
 
-	if(!isDashing)
+	if (!isDashing)
 		if (abs(vx) > abs(maxVx)) vx = maxVx;
 
 	// reset untouchable timer if untouchable time has passed
-	if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
+	if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
 	{
 		untouchable_start = 0;
 		untouchable = 0;
@@ -67,7 +67,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (e->ny != 0 && e->obj->IsBlocking())
 	{
 		vy = 0;
-		if (e->ny < 0){
+		if (e->ny < 0) {
 			isOnPlatform = true;
 			jumpCount = 0;
 			dashCount = 0;
@@ -77,11 +77,11 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 			br->boundUp();
 		}
 	}
-	else 
-	if (e->nx != 0 && e->obj->IsBlocking())
-	{
-		vx = 0;
-	}
+	else
+		if (e->nx != 0 && e->obj->IsBlocking())
+		{
+			vx = 0;
+		}
 
 	if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomba(e);
@@ -97,7 +97,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
-	if(isDashing) return;
+	if (isDashing) return;
 	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 
 	// jump on top >> kill Goomba and deflect a bit 
@@ -309,14 +309,14 @@ void CMario::Render()
 	animations->Get(aniId)->Render(x, y);
 
 	//RenderBoundingBox();
-	
+
 	DebugOutTitle(L"Coins: %d", coin);
 }
 
 void CMario::SetState(int state)
 {
 	// DIE is the end state, cannot be changed! 
-	if (this->state == MARIO_STATE_DIE) return; 
+	if (this->state == MARIO_STATE_DIE) return;
 
 	switch (state)
 	{
@@ -348,8 +348,8 @@ void CMario::SetState(int state)
 		if (isSitting) break;
 		if (isOnPlatform)
 		{
-			jumpCount = 1; 
-			isOnPlatform = false; 
+			jumpCount = 1;
+			isOnPlatform = false;
 			vy = (abs(this->vx) >= MARIO_RUNNING_SPEED) ? -MARIO_JUMP_RUN_SPEED_Y : -MARIO_JUMP_SPEED_Y;
 			if (level == MARIO_LEVEL_SMALL) {
 				SoundManager::GetInstance()->PlaySFX(L"jumpsmall");
@@ -358,10 +358,10 @@ void CMario::SetState(int state)
 				SoundManager::GetInstance()->PlaySFX(L"jumpsuper");
 			}
 		}
-		
+
 		else if (jumpCount < 2)
 		{
-			jumpCount = 2; 
+			jumpCount = 2;
 			vy = (abs(this->vx) >= MARIO_RUNNING_SPEED) ? -MARIO_JUMP_RUN_SPEED_Y : -MARIO_JUMP_SPEED_Y;
 			if (level == MARIO_LEVEL_SMALL) {
 				SoundManager::GetInstance()->PlaySFX(L"jumpsmall");
@@ -374,7 +374,7 @@ void CMario::SetState(int state)
 
 	case MARIO_STATE_DASH:
 
-		if (isSitting || isDashing) break; 
+		if (isSitting || isDashing) break;
 		if (dashCount < 1) {
 			dashCount++;
 			isDashing = true;
@@ -395,7 +395,7 @@ void CMario::SetState(int state)
 			state = MARIO_STATE_IDLE;
 			isSitting = true;
 			vx = 0; vy = 0.0f;
-			y +=MARIO_SIT_HEIGHT_ADJUST;
+			y += MARIO_SIT_HEIGHT_ADJUST;
 		}
 		break;
 
@@ -423,9 +423,9 @@ void CMario::SetState(int state)
 	CGameObject::SetState(state);
 }
 
-void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom)
+void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (level==MARIO_LEVEL_BIG)
+	if (level == MARIO_LEVEL_BIG)
 	{
 		if (isSitting)
 		{
@@ -434,18 +434,18 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 			right = left + MARIO_BIG_SITTING_BBOX_WIDTH;
 			bottom = top + MARIO_BIG_SITTING_BBOX_HEIGHT;
 		}
-		else 
+		else
 		{
-			left = x - MARIO_BIG_BBOX_WIDTH/2;
-			top = y - MARIO_BIG_BBOX_HEIGHT/2;
+			left = x - MARIO_BIG_BBOX_WIDTH / 2;
+			top = y - MARIO_BIG_BBOX_HEIGHT / 2;
 			right = left + MARIO_BIG_BBOX_WIDTH;
 			bottom = top + MARIO_BIG_BBOX_HEIGHT;
 		}
 	}
 	else
 	{
-		left = x - MARIO_SMALL_BBOX_WIDTH/2;
-		top = y - MARIO_SMALL_BBOX_HEIGHT/2;
+		left = x - MARIO_SMALL_BBOX_WIDTH / 2;
+		top = y - MARIO_SMALL_BBOX_HEIGHT / 2;
 		right = left + MARIO_SMALL_BBOX_WIDTH;
 		bottom = top + MARIO_SMALL_BBOX_HEIGHT;
 	}
@@ -460,4 +460,3 @@ void CMario::SetLevel(int l)
 	}
 	level = l;
 }
-

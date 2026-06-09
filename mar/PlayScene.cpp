@@ -13,6 +13,7 @@
 #include "Background.h"
 #include "Bullet.h"
 #include "Turret.h"
+#include "EatingFlower.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -180,6 +181,15 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		break;
 	}
+	case OBJECT_TYPE_EATING_FLOWER:
+	{
+		if (tokens.size() < 3) return;
+
+		obj = new CFlower(x, y);
+		break;
+	}
+
+
 
 	case OBJECT_TYPE_PLATFORM:
 	{

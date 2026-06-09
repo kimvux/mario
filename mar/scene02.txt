@@ -7,6 +7,7 @@ platform_texture_map1.txt
 turret.txt
 bullet.txt
 coin.txt
+flower.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -37,6 +38,11 @@ coin.txt
 #Turret 
 12	1350	320	1
 12	1000	220	2
+
+#Flower
+13	1000	230	
+
+
 
 #Coin
 #type	x	y	col	row	hor	ver
