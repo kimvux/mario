@@ -10,6 +10,7 @@
 #include "Star.h"
 #include "Brick.h"
 #include "Bullet.h"
+#include "EatingFlower.h"
 #include <Windows.h>
 #include "SoundManager.h"
 
@@ -93,6 +94,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CSTAR*>(e->obj))
 		OnCollisionWithStar(e);
+	else if (dynamic_cast<CFlower*>(e->obj))
+		OnCollisionWithFlower(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -131,6 +134,26 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 }
 
 void CMario::OnCollisionWithBullet(LPCOLLISIONEVENT e)
+{
+	if (isDashing) return;
+	CBullet* bullet = dynamic_cast<CBullet*>(e->obj);
+
+	if (untouchable == 0)
+	{
+		if (level > MARIO_LEVEL_SMALL)
+		{
+			level = MARIO_LEVEL_SMALL;
+			StartUntouchable();
+		}
+		else
+		{
+			DebugOut(L">>> Mario DIE >>> \n");
+			SetState(MARIO_STATE_DIE);
+		}
+	}
+}
+
+void CMario::OnCollisionWithFlower(LPCOLLISIONEVENT e)
 {
 	if (isDashing) return;
 	CBullet* bullet = dynamic_cast<CBullet*>(e->obj);

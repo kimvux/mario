@@ -5,8 +5,8 @@
 CFlower::CFlower(float x, float y) : CGameObject(x, y) {
 	this->vx = 0;
 	this->vy = 0;
-	this->IsOpen = false;                   
-	this->lastBiteTime = GetTickCount64();   
+	this->IsOpen = false;
+	this->lastBiteTime = GetTickCount64();
 	SetState(FLOWER_STATE_CLOSED_MOUTH);
 }
 
@@ -25,7 +25,7 @@ void CFlower::SetState(int state) {
 	case FLOWER_STATE_CLOSED_MOUTH:
 		break;
 	}
-	
+
 }
 
 void CFlower::OnNoCollision(DWORD dt)
@@ -35,7 +35,8 @@ void CFlower::OnNoCollision(DWORD dt)
 
 void CFlower::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-
+	if (!e->obj->IsBlocking()) return;
+	if (dynamic_cast<CBullet*>(e->obj)) return;
 }
 
 void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
@@ -70,4 +71,3 @@ void CFlower::Render() {
 
 	RenderBoundingBox();
 }
-
