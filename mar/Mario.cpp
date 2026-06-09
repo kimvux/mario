@@ -483,3 +483,4 @@ void CMario::SetLevel(int l)
 	}
 	level = l;
 }
+//test github
