@@ -87,7 +87,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		return TRUE;
 	}
 	case WM_LBUTTONDOWN: {
-		CGame::GetInstance()->InitiateSwitchScene(2);
+		CGame::GetInstance()->InitiateSwitchScene(1);
 		return 0;
 	}
 	case WM_DESTROY:
@@ -232,7 +232,6 @@ int WINAPI WinMain(
 	SetDebugWindow(hWnd);
 
 	LPGAME game = CGame::GetInstance();
-	LPSOUNDMANAGER soundManager = SoundManager::GetInstance();
 	game->Init(hWnd, hInstance);
 	game->InitKeyboard();
 
@@ -241,7 +240,7 @@ int WINAPI WinMain(
 	game->Load(L"mario-sample.txt");  
 
 	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH * 1.5, SCREEN_HEIGHT * 1.5, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
-	soundManager->PlayMusic(L"maintheme");
+	SoundManager::GetInstance()->PlayMusic(L"1");
 	Run();
 
 	return 0;

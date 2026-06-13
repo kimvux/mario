@@ -14,6 +14,7 @@
 #include "Bullet.h"
 #include "Turret.h"
 #include "EatingFlower.h"
+#include "Tunnel.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -226,6 +227,17 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 
+	case OBJECT_TYPE_TUNNEL:
+	{
+		float width = (float)atof(tokens[3].c_str());
+		float height = (float)atof(tokens[4].c_str());
+		int targetScene = atoi(tokens[5].c_str());
+		int ani_id = atoi(tokens[6].c_str());
+		obj = new Tunnel(x, y, width, height, targetScene, ani_id);
+		DebugOut(L"[INFO] Tunnel created at x=%f, y=%f with width=%f, height=%f, targetScene=%d\n", x, y, width, height, targetScene);
+		break;
+	}
+
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
 		return;
@@ -336,8 +348,11 @@ void CPlayScene::Update(DWORD dt)
 	cy -= game->GetBackBufferHeight() / 2;
 
 	if (cx < 0) cx = 0;
-
-	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+	if (id == 1 || id == 0) {
+		CGame::GetInstance()->SetCamPos(0.0f, 0.0f);
+	}
+	else
+		CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
 
 	PurgeDeletedObjects();
 }

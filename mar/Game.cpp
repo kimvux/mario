@@ -381,6 +381,8 @@ void CGame::InitKeyboard()
 
 void CGame::ProcessKeyboard()
 {
+	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	if (mario->IsChangingScene()) return;
 	HRESULT hr;
 
 	// Collect all key states first

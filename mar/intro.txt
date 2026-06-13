@@ -1,7 +1,7 @@
 # list of object assets to load in this scene
 [ASSETS]
 mario.txt
-bghill.txt
+background.txt
 #
 
 [OBJECTS]
@@ -11,5 +11,6 @@ bghill.txt
 
 #Background layer 1
 #type	x	y	z	cw	ch	l	h	ani
-8	360	225	0	1	1	1	1	700015
 
+
+1	352	200	1	1	1	1	1	700015

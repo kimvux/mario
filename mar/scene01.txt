@@ -1,100 +1,27 @@
 # list of object assets to load in this scene
 [ASSETS]
 mario.txt
-brick.txt
-coin.txt
-goomba.txt
-cloud.txt
-bghill.txt
-bullet.txt
-turret.txt
-flower.txt
+brick_texture_map1.txt
+tunnel.txt
 #
 
 [OBJECTS]
 # See OBJECT_TYPE constants in AssetIDs.h
 
-#Background layer 1
-#type	x	y	z	cw	ch	l	h	ani
+# MARIO
+0	80	10	1
 
-8	0	150	0	920	790	10	1	700006
-
-8	0	210	-5	927	269	10	1	700008
-8	0	210	-3	927	269	10	1	700005
-8	0	36	0	927	253	10	1	700004
-8	0	218	0	751	269	10	1	700007
-
-#tree
-8	420	275	0	1012	142	10	1	700011
-8	470	260	0	100	150	1	1	700013
-
-#bush
-8	180	330	0	400	36	10	1	700012
-
-
-
-
-
-#Platform
-5	740	320	63	40	1	1	70009
-
-
-
-
-
+# tunnel
+#type	x	y	w	h	target	ani
+14	270	280	30	30	2	69000
+14	440	280	30	30	3	69000
+14	620	280	30	30	0	69000
 
 
 # BRICKS
 # type	x	y	col	row	w	h	bound	ani
-1	740	288	10	1	16	16	0	10002
-1	740	303	10	3	16	16	0	10003
-
-1	1000	220	20	1	16	16	0	10002
-
-1	1500	304	14	1	16	16	0	10002
-1	1580	320	1	2	16	16	0	10002
-1	1650	272	2	2	16	16	0	10002
-1	1500	220	6	2	16	16	0	10002
-
-1	1900	334	9	1	16	16	0	10002
-1	1950	180	2	2	16	16	0	10002
-1	2014	180	2	2	16	16	0	10002
-1	1800	180	7	2	16	16	0	10002
-
-1	2200	100	2	13	16	16	0	10002
-1	2350	142	2	13	16	16	0	10002
-
-#box
-1	440	325	1	1	44	44	0	10004
-1	910	335	1	1	44	44	0	10004
-
-0	280	10	1
-#COIN
-# type	x	y
+1	360	360	1	1	719	135	0	800024
+1	-25	100	1	5	44	44	0	800023
+1	730	100	1	5	44	44	0	800023
 
 
-#Goomba
-2	700	10
-2	600	8
-
-
-#Turret 
-12	700	100	3
-
-#Platform
-#type	x	y	cw	ch	l	h	sprite
-
-
-5	360	320	49	40	1	1	70010
-
-#
-5	0	350	16	16	400	1	20002
-
-#Portal 
-
-#bush
-8	150	340	1	335	36	10	1	700012
-
-#Background layer 2
-#type	x	y	z	cw	ch	l	h	ani
-8	-100	390	3	927	253	5	1	700004

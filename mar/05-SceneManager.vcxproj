@@ -166,6 +166,7 @@
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Textures.cpp" />
+    <ClCompile Include="Tunnel.cpp" />
     <ClCompile Include="Turret.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
@@ -196,6 +197,7 @@
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Textures.h" />
+    <ClInclude Include="Tunnel.h" />
     <ClInclude Include="Turret.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>

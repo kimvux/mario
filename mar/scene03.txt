@@ -1,7 +1,7 @@
 # list of object assets to load in this scene
 [ASSETS]
 mario.txt
-bghill.txt
+background.txt
 brick_texture_map2.txt
 platform_texture_map2.txt
 coin.txt

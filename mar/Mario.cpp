@@ -13,6 +13,7 @@
 #include "EatingFlower.h"
 #include <Windows.h>
 #include "SoundManager.h"
+#include "Tunnel.h"
 
 #include "Collision.h"
 
@@ -53,6 +54,25 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable = 0;
 	}
 
+	if (isOnTunnel && (this->state == MARIO_STATE_IDLE || this->state == MARIO_STATE_SIT)) {
+		tunnelTimer += dt;
+		if (tunnelTimer >= MARIO_TUNNEL_TIME) {
+			isOnTunnel = false;
+			tunnelTimer = 0;
+			isChangingScene = true;
+			SoundManager::GetInstance()->PlaySFX(L"pipe");
+		}
+	}
+	else {
+		tunnelTimer = 0;
+	}
+
+	if (isChangingScene) {
+		if (y < tunnelStartY + 30.0f) y += dt / 15;
+		else CGame::GetInstance()->InitiateSwitchScene(tunnelSceneId);
+		return;
+	}
+
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
@@ -61,6 +81,8 @@ void CMario::OnNoCollision(DWORD dt)
 	x += vx * dt;
 	y += vy * dt;
 	isOnPlatform = false;
+	isOnTunnel = false;
+	tunnelTimer = 0;
 }
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
@@ -72,8 +94,13 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 			isOnPlatform = true;
 			jumpCount = 0;
 			dashCount = 0;
+			if (dynamic_cast<Tunnel*>(e->obj)) {
+				isOnTunnel = true;
+				tunnelSceneId = dynamic_cast<Tunnel*>(e->obj)->GetTargetScene();
+				tunnelStartY = y;
+			}
 		}
-		if (e->ny > 0) {
+		if (e->ny > 0 && dynamic_cast<CBrick*>(e->obj)) {
 			CBrick* br = dynamic_cast<CBrick*>(e->obj);
 			br->boundUp();
 		}

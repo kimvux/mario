@@ -103,6 +103,7 @@
 
 
 #define MARIO_UNTOUCHABLE_TIME 2500
+#define MARIO_TUNNEL_TIME 1000
 
 class CMario : public CGameObject
 {
@@ -122,7 +123,12 @@ class CMario : public CGameObject
 	void OnCollisionWithStar(LPCOLLISIONEVENT e);
 	void OnCollisionWithBullet(LPCOLLISIONEVENT e);
 	void OnCollisionWithFlower(LPCOLLISIONEVENT e);
-
+	
+	float tunnelTimer = 0;
+	bool isOnTunnel = false;
+	int tunnelSceneId = 0;
+	bool isChangingScene = false;
+	float tunnelStartY = 0;
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
@@ -163,4 +169,5 @@ public:
 	float getVx() { return vx; }
 	bool isDashing = false;
 	int dashDirection = 0;
+	bool IsChangingScene() { return isChangingScene; }
 };
