@@ -2,6 +2,7 @@
 [ASSETS]
 mario.txt
 brick_texture_map1.txt
+platform_texture_map1.txt
 tunnel.txt
 #
 
@@ -9,7 +10,7 @@ tunnel.txt
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-0	80	10	1
+0	250	10	1
 
 # tunnel
 #type	x	y	w	h	target	ani

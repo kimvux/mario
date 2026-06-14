@@ -81,6 +81,25 @@
 #define ID_ANI_MARIO_SMALL_JUMP_RUN_RIGHT 1600
 #define ID_ANI_MARIO_SMALL_JUMP_RUN_LEFT 1601
 
+// UNTOUCHABLE
+#define ID_ANI_MARIO_UNTOUCHABLE_IDLE_RIGHT 1700
+#define ID_ANI_MARIO_UNTOUCHABLE_IDLE_LEFT 1701
+
+#define ID_ANI_MARIO_UNTOUCHABLE_JUMP_RIGHT 1704
+#define ID_ANI_MARIO_UNTOUCHABLE_JUMP_LEFT 1705
+
+#define ID_ANI_MARIO_UNTOUCHABLE_WALK_RIGHT 1702
+#define ID_ANI_MARIO_UNTOUCHABLE_WALK_LEFT 1703
+
+#define ID_ANI_MARIO_UNTOUCHABLE_JUMP_WALK_RIGHT 1706
+#define ID_ANI_MARIO_UNTOUCHABLE_JUMP_WALK_LEFT 1707
+
+#define ID_ANI_MARIO_UNTOUCHABLE_SIT_RIGHT 1708
+#define ID_ANI_MARIO_UNTOUCHABLE_SIT_LEFT 1709
+
+#define ID_ANI_MARIO_UNTOUCHABLE_BRACE_RIGHT 1710
+#define ID_ANI_MARIO_UNTOUCHABLE_BRACE_LEFT 1711
+
 #pragma endregion
 
 #define GROUND_Y 160.0f
@@ -90,6 +109,7 @@
 
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
+#define MARIO_LEVEL_UNTOUCHABLE	3
 
 #define MARIO_BIG_BBOX_WIDTH  14
 #define MARIO_BIG_BBOX_HEIGHT 24
@@ -102,7 +122,8 @@
 #define MARIO_SMALL_BBOX_HEIGHT 12
 
 
-#define MARIO_UNTOUCHABLE_TIME 2500
+#define MARIO_UNTOUCHABLE_TIME 10000
+#define MARIO_RECOVERY_TIME 2000
 #define MARIO_TUNNEL_TIME 1000
 
 class CMario : public CGameObject
@@ -123,6 +144,8 @@ class CMario : public CGameObject
 	void OnCollisionWithStar(LPCOLLISIONEVENT e);
 	void OnCollisionWithBullet(LPCOLLISIONEVENT e);
 	void OnCollisionWithFlower(LPCOLLISIONEVENT e);
+	void OnCollisionWithTurtle(LPCOLLISIONEVENT e);
+	void OnCollisionWithMushroom(LPCOLLISIONEVENT e);
 	
 	float tunnelTimer = 0;
 	bool isOnTunnel = false;
@@ -130,8 +153,16 @@ class CMario : public CGameObject
 	bool isChangingScene = false;
 	float tunnelStartY = 0;
 
+	bool isOnMovingPlatform = false;
+	float platformVx = 0;
+	float platformVy = 0;
+
+	int recovery;
+	float recoveryStart;
+
 	int GetAniIdBig();
 	int GetAniIdSmall();
+	int GetAniIdUntouchable();
 
 public:
 	CMario(float x, float y, bool moveAble) : CGameObject(x, y)
@@ -147,6 +178,8 @@ public:
 		untouchable_start = -1;
 		isOnPlatform = false;
 		coin = 0;
+		recovery = 0;
+		recoveryStart = -1;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -164,7 +197,7 @@ public:
 
 	void SetLevel(int l);
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
-
+	void StartRecovery() { recovery = 1; recoveryStart = GetTickCount64(); }
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	float getVx() { return vx; }
 	bool isDashing = false;

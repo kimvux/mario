@@ -14,6 +14,10 @@
 #include <Windows.h>
 #include "SoundManager.h"
 #include "Tunnel.h"
+#include "PlatformMovableX.h"
+#include "PlatformMovableY.h"
+#include "Turtle.h"
+#include "Mushroom.h"
 
 #include "Collision.h"
 
@@ -48,10 +52,17 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (abs(vx) > abs(maxVx)) vx = maxVx;
 
 	// reset untouchable timer if untouchable time has passed
-	if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
+	if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME && untouchable)
 	{
 		untouchable_start = 0;
 		untouchable = 0;
+		SoundManager::GetInstance()->PlayMusic(to_wstring(CGame::GetInstance()->GetCurrentSceneId()));
+		SetLevel(MARIO_LEVEL_BIG);
+	}
+	if (GetTickCount64() - recoveryStart > MARIO_RECOVERY_TIME && recovery)
+	{
+		recoveryStart = 0;
+		recovery = 0;
 	}
 
 	if (isOnTunnel && (this->state == MARIO_STATE_IDLE || this->state == MARIO_STATE_SIT)) {
@@ -73,6 +84,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		return;
 	}
 
+	if (isOnMovingPlatform) {
+		x += platformVx * dt;
+		y += platformVy * dt;
+	}
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
@@ -81,8 +96,11 @@ void CMario::OnNoCollision(DWORD dt)
 	x += vx * dt;
 	y += vy * dt;
 	isOnPlatform = false;
+	isOnMovingPlatform = false;
 	isOnTunnel = false;
 	tunnelTimer = 0;
+	platformVx = 0;
+	platformVy = 0;
 }
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
@@ -98,6 +116,16 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 				isOnTunnel = true;
 				tunnelSceneId = dynamic_cast<Tunnel*>(e->obj)->GetTargetScene();
 				tunnelStartY = y;
+			}
+			if (dynamic_cast<PlatformMovableX*>(e->obj)) {
+				PlatformMovableX* p = dynamic_cast<PlatformMovableX*>(e->obj);
+				platformVx = p->GetMoveAndSpeed();
+				isOnMovingPlatform = true;
+			}
+			if (dynamic_cast<PlatformMovableY*>(e->obj)) {
+				PlatformMovableY* p = dynamic_cast<PlatformMovableY*>(e->obj);
+				platformVy = p->GetMoveAndSpeed();
+				isOnMovingPlatform = true;
 			}
 		}
 		if (e->ny > 0 && dynamic_cast<CBrick*>(e->obj)) {
@@ -123,6 +151,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithStar(e);
 	else if (dynamic_cast<CFlower*>(e->obj))
 		OnCollisionWithFlower(e);
+	else if (dynamic_cast<Turtle*>(e->obj))
+		OnCollisionWithTurtle(e);
+	else if (dynamic_cast<Mushroom*>(e->obj))
+		OnCollisionWithMushroom(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -141,14 +173,14 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	}
 	else // hit by Goomba
 	{
-		if (untouchable == 0)
+		if (untouchable == 0 || recovery == 0)
 		{
 			if (goomba->GetState() != GOOMBA_STATE_DIE)
 			{
 				if (level > MARIO_LEVEL_SMALL)
 				{
 					level = MARIO_LEVEL_SMALL;
-					StartUntouchable();
+					StartRecovery();
 				}
 				else
 				{
@@ -165,12 +197,12 @@ void CMario::OnCollisionWithBullet(LPCOLLISIONEVENT e)
 	if (isDashing) return;
 	CBullet* bullet = dynamic_cast<CBullet*>(e->obj);
 
-	if (untouchable == 0)
+	if (untouchable == 0 || recovery == 0)
 	{
 		if (level > MARIO_LEVEL_SMALL)
 		{
 			level = MARIO_LEVEL_SMALL;
-			StartUntouchable();
+			StartRecovery();
 		}
 		else
 		{
@@ -185,12 +217,12 @@ void CMario::OnCollisionWithFlower(LPCOLLISIONEVENT e)
 	if (isDashing) return;
 	CBullet* bullet = dynamic_cast<CBullet*>(e->obj);
 
-	if (untouchable == 0)
+	if (untouchable == 0 || recovery == 0)
 	{
 		if (level > MARIO_LEVEL_SMALL)
 		{
 			level = MARIO_LEVEL_SMALL;
-			StartUntouchable();
+			StartRecovery();
 		}
 		else
 		{
@@ -212,13 +244,69 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithStar(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
-	coin += 10;
+	coin += 50;
+	SoundManager::GetInstance()->PlayMusic(L"star");
+	SetLevel(MARIO_LEVEL_UNTOUCHABLE);
+	StartUntouchable();
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
 	CPortal* p = (CPortal*)e->obj;
 	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
+}
+
+void CMario::OnCollisionWithTurtle(LPCOLLISIONEVENT e)
+{
+	if (isDashing) return;
+	Turtle* turtle = dynamic_cast<Turtle*>(e->obj);
+	if (e->nx != 0 && turtle->IsDie()) {
+		turtle->slide(-e->nx);
+	}
+	if (e->ny < 0)
+	{
+		if (!turtle->IsDie())
+		{
+			turtle->Kill();
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+		else {
+			turtle->slide(nx);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+	}
+	else // hit by Turtle
+	{
+		if (untouchable == 0 || recovery == 0)
+		{
+			if (!turtle->IsDie() || turtle->IsSlide())
+			{
+				if (level > MARIO_LEVEL_SMALL)
+				{
+					level = MARIO_LEVEL_SMALL;
+					StartRecovery();
+				}
+				else
+				{
+					DebugOut(L">>> Mario DIE >>> \n");
+					SetState(MARIO_STATE_DIE);
+				}
+			}
+		}
+	}
+}
+
+void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
+{
+	Mushroom* m = dynamic_cast<Mushroom*>(e->obj);
+	m->Delete();
+	if (level == MARIO_LEVEL_SMALL) {
+		SetLevel(MARIO_LEVEL_BIG);
+	}
+	else {
+		coin += 10;
+	}
+	SoundManager::GetInstance()->PlaySFX(L"powerup");
 }
 
 //
@@ -344,6 +432,48 @@ int CMario::GetAniIdBig()
 	return aniId;
 }
 
+int CMario::GetAniIdUntouchable()
+{
+	int aniId = -1;
+	if (!isOnPlatform)
+	{
+		if (nx >= 0)
+			aniId = ID_ANI_MARIO_UNTOUCHABLE_JUMP_RIGHT;
+		else
+			aniId = ID_ANI_MARIO_UNTOUCHABLE_JUMP_LEFT;
+	}
+	else
+		if (isSitting)
+		{
+			if (nx > 0)
+				aniId = ID_ANI_MARIO_UNTOUCHABLE_SIT_RIGHT;
+			else
+				aniId = ID_ANI_MARIO_UNTOUCHABLE_SIT_LEFT;
+		}
+		else
+			if (vx == 0)
+			{
+				if (nx > 0) aniId = ID_ANI_MARIO_UNTOUCHABLE_IDLE_RIGHT;
+				else aniId = ID_ANI_MARIO_UNTOUCHABLE_IDLE_LEFT;
+			}
+			else if (vx > 0)
+			{
+				if (ax < 0)
+					aniId = ID_ANI_MARIO_UNTOUCHABLE_BRACE_RIGHT;
+				else if (ax == MARIO_ACCEL_WALK_X)
+					aniId = ID_ANI_MARIO_UNTOUCHABLE_WALK_RIGHT;
+			}
+			else // vx < 0
+			{
+				if (ax > 0)
+					aniId = ID_ANI_MARIO_UNTOUCHABLE_BRACE_LEFT;
+				else if (ax == -MARIO_ACCEL_WALK_X)
+					aniId = ID_ANI_MARIO_UNTOUCHABLE_WALK_LEFT;
+			}
+	if (aniId == -1) aniId = ID_ANI_MARIO_UNTOUCHABLE_IDLE_RIGHT;
+	return aniId;
+}
+
 void CMario::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
@@ -355,6 +485,8 @@ void CMario::Render()
 		aniId = GetAniIdBig();
 	else if (level == MARIO_LEVEL_SMALL)
 		aniId = GetAniIdSmall();
+	else if (level == MARIO_LEVEL_UNTOUCHABLE)
+		aniId = GetAniIdUntouchable();
 
 	animations->Get(aniId)->Render(x, y);
 
@@ -475,7 +607,7 @@ void CMario::SetState(int state)
 
 void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (level == MARIO_LEVEL_BIG)
+	if (level == MARIO_LEVEL_BIG || level == MARIO_LEVEL_UNTOUCHABLE)
 	{
 		if (isSitting)
 		{
@@ -503,10 +635,6 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
 
 void CMario::SetLevel(int l)
 {
-	// Adjust position to avoid falling off platform
-	if (this->level == MARIO_LEVEL_SMALL)
-	{
-		y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
-	}
+	y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
 	level = l;
 }

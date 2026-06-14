@@ -15,6 +15,10 @@
 #include "Turret.h"
 #include "EatingFlower.h"
 #include "Tunnel.h"
+#include "PlatformMovableX.h"
+#include "PlatformMovableY.h"
+#include "Turtle.h"
+#include "Mushroom.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -235,6 +239,48 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int ani_id = atoi(tokens[6].c_str());
 		obj = new Tunnel(x, y, width, height, targetScene, ani_id);
 		DebugOut(L"[INFO] Tunnel created at x=%f, y=%f with width=%f, height=%f, targetScene=%d\n", x, y, width, height, targetScene);
+		break;
+	}
+
+	case OBJECT_TYPE_PLATFORMMOVABLEX:
+	{
+		float cell_width = (float)atof(tokens[3].c_str());
+		float cell_height = (float)atof(tokens[4].c_str());
+		int length = atoi(tokens[5].c_str());
+		int height = atoi(tokens[6].c_str());
+		int sprite = atoi(tokens[7].c_str());
+		float move_range = (float)atof(tokens[8].c_str());
+		float move_speed = (float)atof(tokens[9].c_str());
+		int moveDirection = atoi(tokens[10].c_str());
+		obj = new PlatformMovableX(x, y, cell_width, cell_height, length, height, sprite, move_range, move_speed, moveDirection);
+		break;
+	}
+
+	case OBJECT_TYPE_PLATFORMMOVABLEY:
+	{
+		float cell_width = (float)atof(tokens[3].c_str());
+		float cell_height = (float)atof(tokens[4].c_str());
+		int length = atoi(tokens[5].c_str());
+		int height = atoi(tokens[6].c_str());
+		int sprite = atoi(tokens[7].c_str());
+		float move_range = (float)atof(tokens[8].c_str());
+		float move_speed = (float)atof(tokens[9].c_str());
+		int moveDirection = atoi(tokens[10].c_str());
+		obj = new PlatformMovableY(x, y, cell_width, cell_height, length, height, sprite, move_range, move_speed, moveDirection);
+		break;
+	}
+
+	case OBJECT_TYPE_TURTLE:
+	{
+		float left = (float)atof(tokens[3].c_str());
+		float right = (float)atof(tokens[4].c_str());
+		obj = new Turtle(x, y, left, right);
+		break;
+	}
+
+	case OBJECT_TYPE_MUSHROOM:
+	{
+		obj = new Mushroom(x, y);
 		break;
 	}
 

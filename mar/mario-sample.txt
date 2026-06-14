@@ -17,6 +17,7 @@ height	240
 -100	textures\bbox.png
 0	textures\mario.png
 10	textures\enemies.png
+11	textures\enemies_flip.png
 20	textures\misc.png
 21	textures\Mario1\Tilesets\OverWorld.png
 22	textures\Free Pixel Art Forest\PNG\Background layers\Layer_0002_7.png
@@ -31,7 +32,7 @@ height	240
 31	textures\png\Level_0__Tiles_map1.png
 32	textures\png\intro_gen.png
 33	textures\png\Level_1__Tiles_map2.png
-34	textures\Fantasy Swamp Forest\Free\BG_1\BG_1.png
+34	textures\Fantasy Swamp Forest\Free\BG_1\BG_1_1.png
 35	textures\Fantasy Swamp Forest\Free\BG_2\BG_2.png
 36	textures\Fantasy Swamp Forest\Free\BG_3\BG_3.png
 37	textures\Fantasy Swamp Forest\Free\Terrain_and_Props.png

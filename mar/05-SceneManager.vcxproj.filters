@@ -96,6 +96,18 @@
     <ClCompile Include="Tunnel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Mushroom.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformMovableX.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformMovableY.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Turtle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -183,6 +195,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Tunnel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mushroom.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformMovableX.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformMovableY.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Turtle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

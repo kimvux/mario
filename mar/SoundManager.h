@@ -15,10 +15,12 @@ public:
 		mciSendString(L"open \"audio/sfx/smb_jump-small.wav\" type mpegvideo alias jumpsmall", NULL, 0, NULL);
 		mciSendString(L"open \"audio/sfx/smb_jump-super.wav\" type mpegvideo alias jumpsuper", NULL, 0, NULL);
 		mciSendString(L"open \"audio/sfx/smb_pipe.wav\" type mpegvideo alias pipe", NULL, 0, NULL);
+		mciSendString(L"open \"audio/sfx/smb_powerup.wav\" type mpegvideo alias powerup", NULL, 0, NULL);
 		mciSendString(L"open \"audio/sfx/yeahoo.wav\" type mpegvideo alias dash", NULL, 0, NULL);
 		mciSendString(L"open \"audio/music/main.wav\" type mpegvideo alias 1", NULL, 0, NULL);
 		mciSendString(L"open \"audio/music/underwater.wav\" type mpegvideo alias 2", NULL, 0, NULL);
 		mciSendString(L"open \"audio/music/underwater.wav\" type mpegvideo alias 3", NULL, 0, NULL);
+		mciSendString(L"open \"audio/music/star.wav\" type mpegvideo alias star", NULL, 0, NULL);
 	}
 	void PlaySFX(const std::wstring& sfxAlias);
 	void PlayMusic(const std::wstring& musicAlias);
