@@ -19,7 +19,7 @@ void PlatformMovableY::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		y = startY - moveRange;
 		moveDirection = 1;
 	}
-	if (y > 450 && moveRange == 0) {
+	if (y > 450 && moveRange == 0){
 		y = 0;
 	}
 	if (y < 0 && moveRange == 0) {

@@ -14,11 +14,15 @@ class Mushroom : public CGameObject {
 protected:
 	float ax;
 	float ay;
+	float defaultY;
+	bool isGrowUp;
 public:
 	Mushroom(float x, float y) : CGameObject(x, y) {
 		this->ax = 0;
 		this->ay = 0.002f;
-		this->vx = 0.05f;
+		this->vx = 0;
+		isGrowUp = true;
+		defaultY = y - 14;
 	}
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
@@ -27,4 +31,5 @@ public:
 	virtual int IsBlocking() { return 0; }
 	virtual void OnNoCollision(DWORD dt);
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
+	void GrowUp(DWORD dt);
 };

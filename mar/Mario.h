@@ -146,6 +146,7 @@ class CMario : public CGameObject
 	void OnCollisionWithFlower(LPCOLLISIONEVENT e);
 	void OnCollisionWithTurtle(LPCOLLISIONEVENT e);
 	void OnCollisionWithMushroom(LPCOLLISIONEVENT e);
+	void OnCollisionWithHammer(LPCOLLISIONEVENT e);
 	
 	float tunnelTimer = 0;
 	bool isOnTunnel = false;
@@ -203,4 +204,5 @@ public:
 	bool isDashing = false;
 	int dashDirection = 0;
 	bool IsChangingScene() { return isChangingScene; }
+	void addCoin(int x) { coin += x; }
 };

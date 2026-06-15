@@ -19,6 +19,8 @@
 #include "PlatformMovableY.h"
 #include "Turtle.h"
 #include "Mushroom.h"
+#include "HammerTurtle.h"
+#include "Hammer.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -139,9 +141,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float height = (float)atof(tokens[6].c_str());
 		int boundtime = atoi(tokens[7].c_str());
 		int ani_id = atoi(tokens[8].c_str());
+		bool deleteAfterBound = atoi(tokens[9].c_str());
+		int sponseType = atoi(tokens[10].c_str());
 		for (int i = 0; i < col; i++) {
 			for (int j = 0; j < row; j++) {
-				CGameObject* brick = new CBrick(x + i * width, y + j * height, width, height, boundtime, ani_id);
+				CGameObject* brick = new CBrick(x + i * width, y + j * height, width, height, boundtime, ani_id, deleteAfterBound, sponseType);
 				objects.push_back(brick);
 			}
 		}
@@ -281,6 +285,24 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_MUSHROOM:
 	{
 		obj = new Mushroom(x, y);
+		break;
+	}
+
+	case OBJECT_TYPE_HAMMERTURTLE:
+	{
+		float left = (float)atof(tokens[3].c_str());
+		float right = (float)atof(tokens[4].c_str());
+		float interval = (float)atof(tokens[5].c_str());
+		float strength = (float)atof(tokens[6].c_str());
+		obj = new HammerTurtle(x, y, left, right, interval, strength);
+		break;
+	}
+
+	case OBJECT_TYPE_HAMMER: 
+	{
+		float ax = (float)atof(tokens[3].c_str());
+		int direction = atoi(tokens[4].c_str());
+		obj = new Hammer(x, y, ax, direction);
 		break;
 	}
 

@@ -39,8 +39,21 @@ void Mushroom::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void Mushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if(isGrowUp){
+		GrowUp(dt);
+		return;
+	}
 	vy += ay * dt;
 	vx += ax * dt;
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
+}
+
+void Mushroom::GrowUp(DWORD dt) {
+	y -= dt/16;
+	if(y <= defaultY) {
+		isGrowUp = false;
+		y = defaultY;
+		vx = 0.05f;
+	}
 }

@@ -20,9 +20,9 @@ tunnel.txt
 
 
 # BRICKS
-# type	x	y	col	row	w	h	bound	ani
-1	360	360	1	1	719	135	0	800024
-1	-25	100	1	5	44	44	0	800023
-1	730	100	1	5	44	44	0	800023
+# type	x	y	col	row	w	h	bound	ani	del	sponse
+1	360	360	1	1	719	135	0	800024	0	0
+1	-25	100	1	5	44	44	0	800023	0	0
+1	730	100	1	5	44	44	0	800023	0	0
 
 

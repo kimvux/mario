@@ -18,6 +18,8 @@
 #include "PlatformMovableY.h"
 #include "Turtle.h"
 #include "Mushroom.h"
+#include "Hammer.h"
+#include "HammerTurtle.h"
 
 #include "Collision.h"
 
@@ -155,6 +157,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithTurtle(e);
 	else if (dynamic_cast<Mushroom*>(e->obj))
 		OnCollisionWithMushroom(e);
+	else if (dynamic_cast<Hammer*>(e->obj) || dynamic_cast<HammerTurtle*>(e->obj))
+		OnCollisionWithHammer(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -173,7 +177,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	}
 	else // hit by Goomba
 	{
-		if (untouchable == 0 || recovery == 0)
+		if (recovery == 0 && !untouchable)
 		{
 			if (goomba->GetState() != GOOMBA_STATE_DIE)
 			{
@@ -197,7 +201,7 @@ void CMario::OnCollisionWithBullet(LPCOLLISIONEVENT e)
 	if (isDashing) return;
 	CBullet* bullet = dynamic_cast<CBullet*>(e->obj);
 
-	if (untouchable == 0 || recovery == 0)
+	if (recovery == 0 && !untouchable)
 	{
 		if (level > MARIO_LEVEL_SMALL)
 		{
@@ -217,7 +221,7 @@ void CMario::OnCollisionWithFlower(LPCOLLISIONEVENT e)
 	if (isDashing) return;
 	CBullet* bullet = dynamic_cast<CBullet*>(e->obj);
 
-	if (untouchable == 0 || recovery == 0)
+	if (recovery == 0 && !untouchable)
 	{
 		if (level > MARIO_LEVEL_SMALL)
 		{
@@ -277,7 +281,7 @@ void CMario::OnCollisionWithTurtle(LPCOLLISIONEVENT e)
 	}
 	else // hit by Turtle
 	{
-		if (untouchable == 0 || recovery == 0)
+		if (recovery == 0 && !untouchable)
 		{
 			if (!turtle->IsDie() || turtle->IsSlide())
 			{
@@ -309,6 +313,22 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 	SoundManager::GetInstance()->PlaySFX(L"powerup");
 }
 
+void CMario::OnCollisionWithHammer(LPCOLLISIONEVENT e) {
+	if (isDashing) return;
+	if (recovery == 0 && !untouchable)
+	{
+		if (level > MARIO_LEVEL_SMALL)
+		{
+			level = MARIO_LEVEL_SMALL;
+			StartRecovery();
+		}
+		else
+		{
+			DebugOut(L">>> Mario DIE >>> \n");
+			SetState(MARIO_STATE_DIE);
+		}
+	}
+}
 //
 // Get animation ID for small Mario
 //
@@ -495,7 +515,7 @@ void CMario::Render()
 	DebugOutTitle(L"Coins: %d", coin);
 }
 
-void CMario::SetState(int state)
+void CMario::SetState	(int state)
 {
 	// DIE is the end state, cannot be changed! 
 	if (this->state == MARIO_STATE_DIE) return;
