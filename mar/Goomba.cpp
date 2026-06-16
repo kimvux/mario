@@ -1,11 +1,17 @@
 #include "Goomba.h"
+#include "Turtle.h"
+#include "Mario.h"
+#include "PlayScene.h"
 
-CGoomba::CGoomba(float x, float y):CGameObject(x, y)
+CGoomba::CGoomba(float x, float y, float leftEdge, float rightEdge):CGameObject(x, y)
 {
 	this->ax = 0;
 	this->ay = GOOMBA_GRAVITY;
+	this->leftEdge = leftEdge;
+	this->rightEdge = rightEdge;
 	die_start = -1;
 	SetState(GOOMBA_STATE_WALKING);
+	isGetHitByTurtleShell = false;
 }
 
 void CGoomba::GetBoundingBox(float &left, float &top, float &right, float &bottom)
@@ -36,7 +42,6 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (!e->obj->IsBlocking()) return; 
 	if (dynamic_cast<CGoomba*>(e->obj)) return; 
-
 	if (e->ny != 0 )
 	{
 		vy = 0;
@@ -45,10 +50,18 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		vx = -vx;
 	}
+	if (dynamic_cast<Turtle*>(e->obj) && dynamic_cast<Turtle*>(e->obj)->IsSlide()) {
+		getHitByTurtleShell();
+	}
 }
 
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	if (isGetHitByTurtleShell) {
+		vy += ay * dt;
+		y += vy * dt;
+		return;
+	}
 	vy += ay * dt;
 	vx += ax * dt;
 
@@ -57,7 +70,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		isDeleted = true;
 		return;
 	}
-
+	if (x <= leftEdge || x >= rightEdge) vx = -vx;
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -91,4 +104,12 @@ void CGoomba::SetState(int state)
 			vx = -GOOMBA_WALKING_SPEED;
 			break;
 	}
+}
+
+void CGoomba::getHitByTurtleShell() {
+	isGetHitByTurtleShell = true;
+	vx = 0;
+	vy = -0.3f;
+	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	mario->addCoin(2);
 }

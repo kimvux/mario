@@ -22,8 +22,10 @@ class CGoomba : public CGameObject
 protected:
 	float ax;				
 	float ay; 
-
+	float leftEdge;
+	float rightEdge;
 	ULONGLONG die_start;
+	bool isGetHitByTurtleShell;
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
@@ -36,6 +38,7 @@ protected:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
 public: 	
-	CGoomba(float x, float y);
+	CGoomba(float x, float y, float leftEdge, float rightEdge);
 	virtual void SetState(int state);
+	void getHitByTurtleShell();
 };

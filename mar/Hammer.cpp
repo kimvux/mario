@@ -1,5 +1,6 @@
 #include "Hammer.h"
 #include "Game.h"
+#include "Mario.h"
 
 void Hammer::GetBoundingBox(float &left, float &top, float &right, float &bottom) {
     left = x - HAMMER_BBOX_WIDTH/2;
@@ -27,4 +28,11 @@ void Hammer::Render() {
 void Hammer::OnNoCollision(DWORD dt) {
     x += vx * direction * dt;
     y += vy * dt;
+}
+
+void Hammer::OnCollisionWith(LPCOLLISIONEVENT e) {
+    if (dynamic_cast<CMario*>(e->obj)) {
+        CMario* mario = dynamic_cast<CMario*>(e->obj);
+        mario->getHitByHammer();
+    }
 }

@@ -25,7 +25,7 @@ public:
 
 	virtual int IsBlocking() { return 0; }
 	virtual int IsCollidable() { return 0; };
-    virtual void OnCollisionWith(LPCOLLISIONEVENT e){};
+    virtual void OnCollisionWith(LPCOLLISIONEVENT e);
     virtual void OnNoCollision(DWORD dt);
 };
 

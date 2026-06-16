@@ -174,7 +174,7 @@ public:
 		ay = MARIO_GRAVITY;
 		this->moveAble = moveAble;
 
-		level = MARIO_LEVEL_BIG;
+		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
 		untouchable_start = -1;
 		isOnPlatform = false;
@@ -205,4 +205,5 @@ public:
 	int dashDirection = 0;
 	bool IsChangingScene() { return isChangingScene; }
 	void addCoin(int x) { coin += x; }
+	void getHitByHammer();
 };

@@ -41,7 +41,7 @@ void CSTAR::OnCollisionWith(LPCOLLISIONEVENT e) {
 	if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CSTAR*>(e->obj)) return;
 
-	if (e->ny != 0)
+	if (e->ny < 0)
 	{
 		vy = -0.3f;
 		ay = 0.001f;

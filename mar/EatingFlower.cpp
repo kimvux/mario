@@ -40,8 +40,6 @@ void CFlower::OnCollisionWith(LPCOLLISIONEVENT e)
 }
 
 void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
-
-	DebugOut(L"--> Update cua Hoa dang chay! IsOpen = %d\n", IsOpen);
 	CGameObject::Update(dt, coObjects);
 	if (GetTickCount64() - lastBiteTime > coolDown)
 	{

@@ -1,4 +1,6 @@
 #include "Bullet.h"
+#include "Brick.h"
+#include "Mario.h"
 
 
 CBullet::CBullet(float x, float y, bool isRight) :CGameObject(x, y) {
@@ -6,6 +8,7 @@ CBullet::CBullet(float x, float y, bool isRight) :CGameObject(x, y) {
 	this->ay = BULLET_GRAVITY;
 	this->isRight = isRight;
 	SetState(BULLET_STATE_FLYING);
+	isCollided = false;
 }
 
 void CBullet::GetBoundingBox(float& left, float& top, float& right, float& bottom) {
@@ -34,6 +37,7 @@ void CBullet::OnNoCollision(DWORD dt)
 
 void CBullet::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	if (dynamic_cast<CBrick*>(e->obj)) Delete();
 	if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CBullet*>(e->obj)) return;
 }
@@ -48,5 +52,5 @@ void CBullet::Render() {
 	int aniId = 6000;
 	float s = isRight ? 1.0f : -1.0f;
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y, -s);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }

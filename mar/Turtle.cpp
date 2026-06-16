@@ -1,4 +1,5 @@
 #include "Turtle.h"
+#include "Brick.h"
 
 Turtle::Turtle(float x, float y, float left, float right) :CGameObject(x, y)
 {
@@ -48,6 +49,12 @@ void Turtle::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	else if (e->nx != 0)
 	{
+		if (dynamic_cast<CBrick*>(e->obj) && isSlide) {
+			CBrick* br = dynamic_cast<CBrick*>(e->obj);
+			if (br->isDeleteAfterBound()) {
+				br->boundUp();
+			}
+		}
 		vx = -vx;
 	}
 }
@@ -87,16 +94,16 @@ void Turtle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void Turtle::Render()
 {
 	int aniId;
-	if (vx > 0) aniId = ID_ANI_GOOMBA_WALKING_FLIP;
-	if (vx <= 0) aniId = ID_ANI_GOOMBA_WALKING;
-	if (isDie)	aniId = ID_ANI_GOOMBA_DIE;
+	if (vx > 0) aniId = ID_ANI_TURTLE_WALKING_FLIP;
+	if (vx <= 0) aniId = ID_ANI_TURTLE_WALKING;
+	if (isDie)	aniId = ID_ANI_TURTLE_DIE;
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	RenderBoundingBox();
 }
 
 void Turtle::Kill()
 {
-	y += (TURTLE_BBOX_HEIGHT - TURTLE_BBOX_HEIGHT_DIE) / 2;
+	y -= (TURTLE_BBOX_HEIGHT - TURTLE_BBOX_HEIGHT_DIE) / 2;
 	vx = 0;
 	isDie = true;
 }

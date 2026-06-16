@@ -194,6 +194,8 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 			}
 		}
 	}
+	if (level == MARIO_LEVEL_UNTOUCHABLE)
+		e->obj->Delete();
 }
 
 void CMario::OnCollisionWithBullet(LPCOLLISIONEVENT e)
@@ -214,6 +216,8 @@ void CMario::OnCollisionWithBullet(LPCOLLISIONEVENT e)
 			SetState(MARIO_STATE_DIE);
 		}
 	}
+	if (level == MARIO_LEVEL_UNTOUCHABLE)
+		e->obj->Delete();
 }
 
 void CMario::OnCollisionWithFlower(LPCOLLISIONEVENT e)
@@ -296,6 +300,9 @@ void CMario::OnCollisionWithTurtle(LPCOLLISIONEVENT e)
 					SetState(MARIO_STATE_DIE);
 				}
 			}
+		}
+		if (untouchable && !turtle->IsDie()) {
+			turtle->Kill();
 		}
 	}
 }
@@ -657,4 +664,21 @@ void CMario::SetLevel(int l)
 {
 	y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
 	level = l;
+}
+
+void CMario::getHitByHammer(){
+	if (isDashing) return;
+	if (recovery == 0 && !untouchable)
+	{
+		if (level > MARIO_LEVEL_SMALL)
+		{
+			level = MARIO_LEVEL_SMALL;
+			StartRecovery();
+		}
+		else
+		{
+			DebugOut(L">>> Mario DIE >>> \n");
+			SetState(MARIO_STATE_DIE);
+		}
+	}
 }

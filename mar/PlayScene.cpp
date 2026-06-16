@@ -132,7 +132,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 		
-	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
+	case OBJECT_TYPE_GOOMBA: 
+	{
+		float leftEdge = (float)atof(tokens[3].c_str());
+		float rightEdge = (float)atof(tokens[4].c_str());
+		obj = new CGoomba(x,y,leftEdge,rightEdge);
+		break;
+	}
 	case OBJECT_TYPE_BRICK:
 	{
 		int col = atoi(tokens[3].c_str());

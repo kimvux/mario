@@ -3,16 +3,16 @@
 #include "debug.h"
 
 #define TURTLE_GRAVITY 0.002f
-#define TURTLE_WALKING_SPEED 0.1f
+#define TURTLE_WALKING_SPEED 0.08f
 #define TURTLE_SLIDE_SPEED 0.35f
 
 #define TURTLE_BBOX_WIDTH 22
 #define TURTLE_BBOX_HEIGHT 30
 #define TURTLE_BBOX_HEIGHT_DIE 20
 
-#define ID_ANI_GOOMBA_WALKING 64000
-#define ID_ANI_GOOMBA_DIE 64100
-#define ID_ANI_GOOMBA_WALKING_FLIP 64200
+#define ID_ANI_TURTLE_WALKING 71000
+#define ID_ANI_TURTLE_DIE 71100
+#define ID_ANI_TURTLE_WALKING_FLIP 71200
 #define TIMEOUT_SLIDE 200
 
 class Turtle : public CGameObject
@@ -31,7 +31,7 @@ protected:
 	virtual void Render();
 
 	virtual int IsCollidable() { return 1; };
-	virtual int IsBlocking() { return 0; }
+	virtual int IsBlocking() { return 1; }
 	virtual void OnNoCollision(DWORD dt);
 
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
