@@ -10,10 +10,10 @@ SpikeTurtle::SpikeTurtle(float x, float y, float left, float right) :CGameObject
 	this->left = left;
 	this->right = right;
 	isSlide = false;
-	srand(time(NULL));
-	intervalSlide = rand() % 3000 + 1000;
-	startSlide = false;
-	timer = 0;
+    srand(time(NULL));
+    intervalSlide = rand() % 3000 + 1000;
+    startSlide = false;
+    timer = 0;
 	this->vx = SPIKETURTLE_WALKING_SPEED;
 }
 
@@ -39,7 +39,7 @@ void SpikeTurtle::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (e->ny != 0)
 	{
 		vy = 0;
-		if (isSlide) startSlide = true;
+        if (isSlide) startSlide = true;
 	}
 	else if (e->nx != 0)
 	{
@@ -49,20 +49,20 @@ void SpikeTurtle::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void SpikeTurtle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	timer += dt * !isSlide;
+    timer += dt * !isSlide;
 	if (timer > intervalSlide) {
-		isSlide = true;
+        isSlide = true;
 		timer = 0;
-		vy -= 0.01 * (rand() % 50 + 10);
-		vx = vx > 0 ? SPIKETURTLE_SLIDE_SPEED : -SPIKETURTLE_SLIDE_SPEED;
-		slideTime = rand() % 5000 + 500;
-	}
+        vy -= 0.01 * (rand() % 50 + 10);
+        vx = vx > 0 ? SPIKETURTLE_SLIDE_SPEED : -SPIKETURTLE_SLIDE_SPEED;
+        slideTime = rand() % 5000 + 500;
+    }
 	slideTime -= dt * isSlide * startSlide;
 	if (slideTime < 0) {
-		isSlide = false;
-		slideTime = 0;
-		vx = vx > 0 ? SPIKETURTLE_WALKING_SPEED : -SPIKETURTLE_WALKING_SPEED;
-	}
+        isSlide = false;
+        slideTime = 0;
+        vx = vx > 0 ? SPIKETURTLE_WALKING_SPEED : -SPIKETURTLE_WALKING_SPEED;
+    }
 	vy += ay * dt;
 	vx += ax * dt;
 

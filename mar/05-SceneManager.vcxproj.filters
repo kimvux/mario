@@ -114,6 +114,15 @@
     <ClCompile Include="Hammer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EatingFlowerMovable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SpikeTurtle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SpikeTurtleDropper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -222,6 +231,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Hammer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EatingFlowerMovable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpikeTurtle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpikeTurtleDropper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

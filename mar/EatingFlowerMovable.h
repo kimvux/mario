@@ -28,7 +28,7 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 
-	virtual int IsCollidable() {
+	virtual int IsCollidable() { 
 		if (flowerType == 0) return 0;
 		return 1;
 	};

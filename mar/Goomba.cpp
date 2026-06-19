@@ -74,7 +74,7 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 }
 
-void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	timer += dt * !isFlying;
 	if (isFlyable && timer >= intervalFlying)
@@ -121,7 +121,7 @@ void CGoomba::Render()
 	{
 		aniId = ID_ANI_GOOMBA_DIE;
 	}
-	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+	CAnimations::GetInstance()->Get(aniId)->Render(x,y);
 	RenderBoundingBox();
 }
 
