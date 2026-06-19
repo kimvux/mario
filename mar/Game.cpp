@@ -1,4 +1,4 @@
-#include <fstream>
+ï»¿#include <fstream>
 
 #include "Game.h"
 #include "debug.h"
@@ -9,7 +9,7 @@
 #include "PlayScene.h"
 #include "SoundManager.h"
 
-CGame * CGame::__instance = NULL;
+CGame* CGame::__instance = NULL;
 
 /*
 	Initialize DirectX, create a Direct3D device for rendering within the window, initial Sprite library for
@@ -99,7 +99,7 @@ void CGame::Init(HWND hWnd, HINSTANCE hInstance)
 	//
 	//
 
-	D3D10_SAMPLER_DESC desc; 
+	D3D10_SAMPLER_DESC desc;
 	desc.Filter = D3D10_FILTER_MIN_MAG_POINT_MIP_LINEAR;
 	desc.AddressU = D3D10_TEXTURE_ADDRESS_CLAMP;
 	desc.AddressV = D3D10_TEXTURE_ADDRESS_CLAMP;
@@ -177,7 +177,7 @@ void CGame::Draw(float x, float y, LPTEXTURE tex, RECT* rect, int sprite_width, 
 
 	D3DX10_SPRITE sprite;
 
-	// Set the sprite’s shader resource view
+	// Set the spriteï¿½s shader resource view
 	sprite.pTexture = tex->getShaderResourceView();
 
 	if (rect == NULL)
@@ -190,8 +190,8 @@ void CGame::Draw(float x, float y, LPTEXTURE tex, RECT* rect, int sprite_width, 
 		sprite.TexSize.x = 1.0f;
 		sprite.TexSize.y = 1.0f;
 
-		if (spriteWidth==0) spriteWidth = tex->getWidth();
-		if (spriteHeight==0) spriteHeight = tex->getHeight();
+		if (spriteWidth == 0) spriteWidth = tex->getWidth();
+		if (spriteHeight == 0) spriteHeight = tex->getHeight();
 	}
 	else
 	{
@@ -224,7 +224,7 @@ void CGame::Draw(float x, float y, LPTEXTURE tex, RECT* rect, int sprite_width, 
 	D3DXMATRIX matScaling;
 	D3DXMatrixScaling(&matScaling, (FLOAT)spriteWidth, (FLOAT)spriteHeight, 1.0f);
 
-	// Setting the sprite’s position and size
+	// Setting the spriteï¿½s position and size
 	sprite.matWorld = (matScaling * matTranslation);
 
 	spriteObject->DrawSpritesImmediate(&sprite, 1, 0, 0);
@@ -247,7 +247,7 @@ LPTEXTURE CGame::LoadTexture(LPCWSTR texturePath)
 		return NULL;
 	}
 
-	D3DX10_IMAGE_LOAD_INFO info; 
+	D3DX10_IMAGE_LOAD_INFO info;
 	ZeroMemory(&info, sizeof(D3DX10_IMAGE_LOAD_INFO));
 	info.Width = imageInfo.Width;
 	info.Height = imageInfo.Height;
@@ -484,11 +484,11 @@ void CGame::Load(LPCWSTR gameFile)
 		if (line == "[SETTINGS]") { section = GAME_FILE_SECTION_SETTINGS; continue; }
 		if (line == "[TEXTURES]") { section = GAME_FILE_SECTION_TEXTURES; continue; }
 		if (line == "[SCENES]") { section = GAME_FILE_SECTION_SCENES; continue; }
-		if (line[0] == '[') 
-		{ 
-			section = GAME_FILE_SECTION_UNKNOWN; 
+		if (line[0] == '[')
+		{
+			section = GAME_FILE_SECTION_UNKNOWN;
 			DebugOut(L"[ERROR] Unknown section: %s\n", ToLPCWSTR(line));
-			continue; 
+			continue;
 		}
 
 		//
@@ -510,11 +510,20 @@ void CGame::Load(LPCWSTR gameFile)
 
 void CGame::SwitchScene()
 {
-	if (next_scene < 0 || next_scene == current_scene) return; 
+	if (isReloading) {
+		timer += 1 * isReloading;
+		if (timer >= RELOAD_TIME) {
+			isReloading = false;
+			timer = 0;
+			ReloadCurrentScene();
+		}
+		return;
+	}
+	if (next_scene < 0 || next_scene == current_scene) return;
 
 	DebugOut(L"[INFO] Switching to scene %d\n", next_scene);
 
-	if (scenes[current_scene]!=NULL)
+	if (scenes[current_scene] != NULL)
 		scenes[current_scene]->Unload();
 
 	CSprites::GetInstance()->Clear();
@@ -524,6 +533,18 @@ void CGame::SwitchScene()
 	LPSCENE s = scenes[next_scene];
 	this->SetKeyHandler(s->GetKeyEventHandler());
 	s->Load();
+}
+
+void CGame::ReloadCurrentScene() {
+	if (scenes[current_scene] != NULL)
+		scenes[current_scene]->Unload();
+	CSprites::GetInstance()->Clear();
+	CAnimations::GetInstance()->Clear();
+
+	LPSCENE s = scenes[current_scene];
+	this->SetKeyHandler(s->GetKeyEventHandler());
+	s->Load();
+	DebugOut(L"[INFO] Loaded scene\n");
 }
 
 void CGame::InitiateSwitchScene(int scene_id)
