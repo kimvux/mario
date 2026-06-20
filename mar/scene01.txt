@@ -4,13 +4,14 @@ mario.txt
 brick_texture_map1.txt
 platform_texture_map1.txt
 tunnel.txt
+text.txt
 #
 
 [OBJECTS]
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-0	250	10	1
+0	200	10	1
 
 # tunnel
 #type	x	y	w	h	target	ani
@@ -26,3 +27,13 @@ tunnel.txt
 1	730	100	1	5	44	44	0	800023	0	0
 
 
+#text
+#type	x	y	type	text
+22	80	15	1	score
+22	218	15	1	coins
+22	356	15	1	world
+22	494	15	1	time
+22	626	15	1	lives
+
+22	80	260	2	0
+22	100	280	5	123123

@@ -16,6 +16,7 @@ hammerturtle.txt
 turtle.txt
 star.txt
 tunnel.txt
+text.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -202,3 +203,16 @@ a
 #type	x	y	z	cw	ch	l	h	ani	moveY
 8	150	340	1	335	36	20	1	700012	0
 8	-100	390	6	927	253	20	1	800004	0
+
+
+#text
+#type	x	y	type	text
+22	80	15	1	score
+22	218	15	1	coins
+22	356	15	1	world
+22	494	15	1	time
+22	626	15	1	lives
+
+22	80	30	2	0
+22	218	30	3	0
+22	356	30	5	2

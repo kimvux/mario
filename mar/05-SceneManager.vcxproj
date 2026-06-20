@@ -173,6 +173,7 @@
     <ClCompile Include="Star.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Sprites.cpp" />
+    <ClCompile Include="Text.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Tunnel.cpp" />
     <ClCompile Include="Turret.cpp" />
@@ -213,6 +214,7 @@
     <ClInclude Include="SpikeTurtleDropper.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Sprites.h" />
+    <ClInclude Include="Text.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Tunnel.h" />

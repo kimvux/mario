@@ -15,6 +15,7 @@ SpikeTurtle::SpikeTurtle(float x, float y, float left, float right) :CGameObject
     startSlide = false;
     timer = 0;
 	this->vx = SPIKETURTLE_WALKING_SPEED;
+	slideTime = 0;
 }
 
 void SpikeTurtle::GetBoundingBox(float& left, float& top, float& right, float& bottom)

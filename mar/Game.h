@@ -117,6 +117,9 @@ public:
 	void _ParseSection_TEXTURES(string line);
 	void ReloadCurrentScene();
 	bool isReloading = false;
+
+	int TotalScore = 0;
+
 	~CGame();
 };
 typedef CGame* LPGAME;

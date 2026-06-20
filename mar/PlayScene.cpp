@@ -24,6 +24,7 @@
 #include "EatingFlowerMovable.h"
 #include "SpikeTurtle.h"
 #include "SpikeTurtleDropper.h"
+#include "Text.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -335,6 +336,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_SPIKETURTLEDROPPER:
 	{
 		obj = new SpikeTurtleDropper(x, y);
+		break;
+	}
+
+	case OBJECT_TYPE_TEXT:
+	{
+		int type = atoi(tokens[3].c_str());
+		string text = tokens[4];
+		obj = new Text(x, y, type, text);
 		break;
 	}
 

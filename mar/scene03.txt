@@ -16,7 +16,7 @@ brick.txt
 flower.txt
 tunnel.txt
 goomba.txt
-
+text.txt
 #
 [OBJECTS]
 
@@ -227,3 +227,16 @@ goomba.txt
 8	-450	400	2	90	76	100	1	700020	0
 8	-500	380	5	500	76	10	1	700019	0
 8	-450	380	7	300	76	100	1	700021	0
+
+
+#text
+#type	x	y	type	text
+22	80	15	1	score
+22	218	15	1	coins
+22	356	15	1	world
+22	494	15	1	time
+22	626	15	1	lives
+
+22	80	30	2	0
+22	218	30	3	0
+22	356	30	5	2
