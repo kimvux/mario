@@ -20,11 +20,12 @@
 #include "Mushroom.h"
 #include "Hammer.h"
 #include "HammerTurtle.h"
+#include "EatingFlowerMovable.h"
+#include "SpikeTurtle.h"
+#include "Collision.h"
 #include "Bowser.h"
 #include "Rflame.h"
 #include "Tunnel.h"
-
-#include "Collision.h"
 
 int jumpCount = 0;
 int dashCount = 0;
@@ -37,6 +38,10 @@ const DWORD dashCoolDown = 2000;
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (y > 500) {
+		SetState(MARIO_STATE_DIE);
+		return;
+	}
 	if (!moveAble) return;
 	if (isDashing) {
 		vx = dashDirection * dashSpeed;
@@ -120,6 +125,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 			deflect_jump_count = 2;
 			dashCount = 0;
 			if (dynamic_cast<Tunnel*>(e->obj)) {
+				if (dynamic_cast<Tunnel*>(e->obj)->GetTargetScene() == -1) return;
 				isOnTunnel = true;
 				tunnelSceneId = dynamic_cast<Tunnel*>(e->obj)->GetTargetScene();
 				tunnelStartY = y;
@@ -168,7 +174,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithBowser(e);
 	else if (dynamic_cast<RFlame*>(e->obj))
 		OnCollisionWithRFlame(e);
-}
+	else if (dynamic_cast<EatingFlowerMovable*>(e->obj))
+		OnCollisionWithFlower(e);
+	else if (dynamic_cast<SpikeTurtle*>(e->obj))
+		OnCollisionWithSpikeTurtle(e);}
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
@@ -180,7 +189,14 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	{
 		if (goomba->GetState() != GOOMBA_STATE_DIE)
 		{
-			goomba->SetState(GOOMBA_STATE_DIE);
+			if (goomba->IsFlyable()) {
+				goomba->disableFly();
+				coin += 2;
+			}
+			else {
+				goomba->SetState(GOOMBA_STATE_DIE);
+				coin += 1;
+			}
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 	}
@@ -420,6 +436,23 @@ void CMario::OnCollisionWithHammer(LPCOLLISIONEVENT e) {
 		}
 	}
 }
+
+void CMario::OnCollisionWithSpikeTurtle(LPCOLLISIONEVENT e) {
+	if (isDashing) return;
+	if (recovery == 0 && !untouchable)
+	{
+		if (level > MARIO_LEVEL_SMALL)
+		{
+			level = MARIO_LEVEL_SMALL;
+			StartRecovery();
+		}
+		else
+		{
+			DebugOut(L">>> Mario DIE >>> \n");
+			SetState(MARIO_STATE_DIE);
+		}
+	}
+}
 //
 // Get animation ID for small Mario
 //
@@ -603,10 +636,10 @@ void CMario::Render()
 
 	//RenderBoundingBox();
 
-	DebugOutTitle(L"Coins: %d", coin);
+	//DebugOutTitle(L"Coins: %d", coin);
 }
 
-void CMario::SetState	(int state)
+void CMario::SetState(int state)
 {
 	// DIE is the end state, cannot be changed! 
 	if (this->state == MARIO_STATE_DIE) return;
@@ -710,6 +743,7 @@ void CMario::SetState	(int state)
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
 		vx = 0;
 		ax = 0;
+		CGame::GetInstance()->isReloading = true;
 		break;
 	}
 
@@ -750,7 +784,7 @@ void CMario::SetLevel(int l)
 	level = l;
 }
 
-void CMario::getHitByHammer(){
+void CMario::getHitByHammer() {
 	if (isDashing) return;
 	if (recovery == 0 && !untouchable)
 	{

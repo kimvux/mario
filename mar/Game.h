@@ -18,7 +18,7 @@ using namespace std;
 #define KEYBOARD_BUFFER_SIZE 1024
 #define KEYBOARD_STATE_SIZE 256
 
-
+#define RELOAD_TIME 100
 
 /*
 	Our simple game framework
@@ -59,6 +59,7 @@ class CGame
 
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_SCENES(string line);
+	int timer = 0;
 
 public:
 	// Init DirectX, Sprite Handler
@@ -114,7 +115,10 @@ public:
 	int GetCurrentSceneId() { return current_scene; }
 
 	void _ParseSection_TEXTURES(string line);
+	void ReloadCurrentScene();
+	bool isReloading = false;
 
+	int TotalScore = 0;
 
 	~CGame();
 };

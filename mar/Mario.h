@@ -4,6 +4,8 @@
 #include "Animation.h"
 #include "Animations.h"
 #include <Windows.h>
+#include "Text.h"
+#include "PlayScene.h"
 
 #include "debug.h"
 
@@ -136,7 +138,6 @@ class CMario : public CGameObject
 	int untouchable;
 	ULONGLONG untouchable_start;
 	BOOLEAN isOnPlatform;
-	int coin;
 	bool moveAble;
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
@@ -149,6 +150,7 @@ class CMario : public CGameObject
 	void OnCollisionWithHammer(LPCOLLISIONEVENT e);
 	void OnCollisionWithBowser(LPCOLLISIONEVENT e);
 	void OnCollisionWithRFlame(LPCOLLISIONEVENT e);
+	void OnCollisionWithSpikeTurtle(LPCOLLISIONEVENT e);
 	
 	float tunnelTimer = 0;
 	bool isOnTunnel = false;
@@ -168,6 +170,8 @@ class CMario : public CGameObject
 	int GetAniIdUntouchable();
 
 public:
+	int coin;
+	int score;
 	CMario(float x, float y, bool moveAble) : CGameObject(x, y)
 	{
 		isSitting = false;
@@ -181,6 +185,7 @@ public:
 		untouchable_start = -1;
 		isOnPlatform = false;
 		coin = 0;
+		score = 0;
 		recovery = 0;
 		recoveryStart = -1;
 	}

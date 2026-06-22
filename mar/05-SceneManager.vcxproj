@@ -153,6 +153,7 @@
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="EatingFlower.cpp" />
+    <ClCompile Include="EatingFlowerMovable.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Goomba.cpp" />
@@ -169,9 +170,12 @@
     <ClCompile Include="RFlame.cpp" />
     <ClCompile Include="SampleKeyEventHandler.cpp" />
     <ClCompile Include="SoundManager.cpp" />
+    <ClCompile Include="SpikeTurtle.cpp" />
+    <ClCompile Include="SpikeTurtleDropper.cpp" />
     <ClCompile Include="Star.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Sprites.cpp" />
+    <ClCompile Include="Text.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Tunnel.cpp" />
     <ClCompile Include="Turret.cpp" />
@@ -191,6 +195,7 @@
     <ClInclude Include="Collision.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="EatingFlower.h" />
+    <ClInclude Include="EatingFlowerMovable.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Goomba.h" />
@@ -209,8 +214,11 @@
     <ClInclude Include="SampleKeyEventHandler.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SoundManager.h" />
+    <ClInclude Include="SpikeTurtle.h" />
+    <ClInclude Include="SpikeTurtleDropper.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Sprites.h" />
+    <ClInclude Include="Text.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Tunnel.h" />

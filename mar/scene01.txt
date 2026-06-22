@@ -4,24 +4,20 @@ mario.txt
 brick_texture_map1.txt
 platform_texture_map1.txt
 tunnel.txt
-bowser.txt
-turret.txt
-bullet.txt
-Rflame.txt
+text.txt
 #
 
 [OBJECTS]
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-0	250	10	1
+0	200	10	1
 
-#bowser
-19	620	100	620	280
-
-
-
-
+# tunnel
+#type	x	y	w	h	target	ani
+14	270	280	30	30	2	69000
+14	440	280	30	30	3	69000
+14	620	280	30	30	-1	69000
 
 
 # BRICKS
@@ -31,3 +27,13 @@ Rflame.txt
 1	730	100	1	5	44	44	0	800023	0	0
 
 
+#text
+#type	x	y	type	text
+22	80	15	1	score
+22	218	15	1	coins
+22	356	15	1	world
+22	494	15	1	time
+22	626	15	1	lives
+
+22	80	260	2	0
+22	100	280	5	123123

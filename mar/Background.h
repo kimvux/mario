@@ -16,8 +16,9 @@ protected:
 	float z;
 	float scale;
 	float ax = 0.0f;
+	float moveY;
 public:
-	CBackground(float x, float y, float z, float cell_width, float cell_height, int length, int height, int ani_id, float scale = 1.0f) : CGameObject(x, y) { 
+	CBackground(float x, float y, float z, float cell_width, float cell_height, int length, int height, int ani_id, float moveY, float scale = 1.0f) : CGameObject(x, y) {
 		this->ani_id = ani_id;
 		this->z = z;
 		this->length = length;
@@ -25,6 +26,7 @@ public:
 		this->cellWidth = cell_width;
 		this->cellHeight = cell_height;
 		this->scale = scale;
+		this->moveY = moveY;
 	}
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
