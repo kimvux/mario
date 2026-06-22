@@ -1,0 +1,21 @@
+# list of object assets to load in this scene
+[ASSETS]
+background.txt
+text.txt
+#
+[OBJECTS]
+
+#Background
+#type	x	y	z	cw	ch	l	h	ani	moveY
+8	360	225	0	720	450	11	1	700023	0
+
+#text
+#type	x	y	type	text
+22	250	100	1	total score
+22	244	130	1	next world
+#22	494	15	1	time
+#22	626	15	1	lives
+
+22	500	100	6	0
+#22	500	130	3	0
+22	500	130	7	0

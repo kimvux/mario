@@ -1,10 +1,11 @@
 # list of object assets to load in this scene
 [ASSETS]
+mario.txt
 background.txt
+text.txt
 #
-
 [OBJECTS]
-# See OBJECT_TYPE constants in AssetIDs.h
-#Background layer 1
+
+#Background
 #type	x	y	z	cw	ch	l	h	ani	moveY
-8	352	200	1	1	1	1	1	700015	0
+8	360	225	0	720	450	11	1	700023	0

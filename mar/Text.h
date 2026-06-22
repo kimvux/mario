@@ -4,10 +4,13 @@
 #include "Animations.h"
 #include <string>
 #define TEXT_TYPE_LETTER 1
-#define TEXT_TYPE_SCORE 2
+#define TEXT_TYPE_INSCENESCORE 2
 #define TEXT_TYPE_COIN 3
 #define TEXT_TYPE_TIME 4
 #define TEXT_TYPE_NUMBER 5
+#define TEXT_TYPE_TOTALSCORE 6
+#define TEXT_TYPE_NEXTSCENE 7
+#define TEXT_TYPE_LIVES 8
 
 #define CHAR_WIDTH 13
 #define TEXT_HEIGHT 13

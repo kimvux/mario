@@ -19,6 +19,8 @@ using namespace std;
 #define KEYBOARD_STATE_SIZE 256
 
 #define RELOAD_TIME 100
+#define SWITCH_SCENE_TIME 200
+#define SCENE_TIME_OUT 300
 
 /*
 	Our simple game framework
@@ -60,6 +62,8 @@ class CGame
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_SCENES(string line);
 	int timer = 0;
+	int switchSceneTimer = 0;
+	bool isSwitchingScene = false;
 
 public:
 	// Init DirectX, Sprite Handler
@@ -113,13 +117,18 @@ public:
 	void SwitchScene();
 	void InitiateSwitchScene(int scene_id);
 	int GetCurrentSceneId() { return current_scene; }
-
+	int GetNextSceneId() { return next_scene; }
 	void _ParseSection_TEXTURES(string line);
 	void ReloadCurrentScene();
 	bool isReloading = false;
 
 	int TotalScore = 0;
-
+	DWORD startSceneTimer = GetTickCount();
+	int lives = 3;
+	
+	bool IsTimeUp() { return (GetTickCount() - startSceneTimer) >= SCENE_TIME_OUT; }
+	void ResetSceneTimer() { startSceneTimer = GetTickCount(); }
+	void ResetLives() { lives = 3; }
 	~CGame();
 };
 typedef CGame* LPGAME;

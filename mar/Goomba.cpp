@@ -148,5 +148,5 @@ void CGoomba::getHitByTurtleShell() {
 	vx = 0;
 	vy = -0.3f;
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-	mario->addCoin(2);
+	mario->score += 200;
 }

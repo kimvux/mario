@@ -382,7 +382,7 @@ void CGame::InitKeyboard()
 void CGame::ProcessKeyboard()
 {
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-	if (mario->IsChangingScene()) return;
+	if (mario && mario->IsChangingScene()) return;
 	HRESULT hr;
 
 	// Collect all key states first
@@ -519,6 +519,16 @@ void CGame::SwitchScene()
 		}
 		return;
 	}
+	if (isSwitchingScene) {
+		switchSceneTimer += 1 * isSwitchingScene;
+		if (switchSceneTimer >= SWITCH_SCENE_TIME) {
+			isSwitchingScene = false;
+			switchSceneTimer = 0;
+			ResetLives();
+		}
+		return;
+	}
+	//if (lives == 0 && !isSwitchingScene) next_scene = 6;
 	if (next_scene < 0 || next_scene == current_scene) return;
 
 	DebugOut(L"[INFO] Switching to scene %d\n", next_scene);
@@ -533,6 +543,8 @@ void CGame::SwitchScene()
 	LPSCENE s = scenes[next_scene];
 	this->SetKeyHandler(s->GetKeyEventHandler());
 	s->Load();
+	SoundManager::GetInstance()->PlayMusic(to_wstring(current_scene));
+	startSceneTimer = GetTickCount();
 }
 
 void CGame::ReloadCurrentScene() {
@@ -549,8 +561,15 @@ void CGame::ReloadCurrentScene() {
 
 void CGame::InitiateSwitchScene(int scene_id)
 {
+	if (isSwitchingScene) return;
+	if (scene_id == 2 || scene_id == 3 || scene_id == 4){
+		isSwitchingScene = true;
+		switchSceneTimer = 0;
+		LPSCENE s = scenes[5];
+		current_scene = 5;
+		s->Load();
+	}
 	next_scene = scene_id;
-	SoundManager::GetInstance()->PlayMusic(to_wstring(scene_id));
 }
 
 

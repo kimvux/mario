@@ -38,6 +38,16 @@ const DWORD dashCoolDown = 2000;
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (!isChangingScene) {
+		sceneTimer = SCENE_TIME_OUT - (GetTickCount64() - CGame::GetInstance()->startSceneTimer) / 1000;
+		if (sceneTimer <= 0 && (CGame::GetInstance()->GetCurrentSceneId() < 2 || CGame::GetInstance()->GetCurrentSceneId() > 4)) {
+			if (sceneTimer < 0) sceneTimer = 0;
+			SetState(MARIO_STATE_DIE);
+			return;
+		}
+	}
+		
+	
 	if (y > 500) {
 		SetState(MARIO_STATE_DIE);
 		return;
@@ -89,8 +99,31 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 	if (isChangingScene) {
-		if (y < tunnelStartY + 30.0f) y += dt / 15;
-		else CGame::GetInstance()->InitiateSwitchScene(tunnelSceneId);
+		int coinToSubtract = coin > 1000 ? 100 : coin > 100 ? 10 : 1;
+		if (coin >= coinToSubtract) {
+			coin -= coinToSubtract;
+			score += coinToSubtract * 100;
+		}
+		int timeToSubtract = sceneTimer > 100 ? 10 : 1;
+		if (sceneTimer >= timeToSubtract) {
+			sceneTimer -= timeToSubtract;
+			score += timeToSubtract * 67;
+		}
+		if (CGame::GetInstance()->lives > 0){
+			CGame::GetInstance()->lives--;
+			score += 1122;
+		}
+		if (y < tunnelStartY + 30.0f) {
+			y += dt / 15;
+		}
+		else {
+			if (coin > 0 || sceneTimer > 0 || CGame::GetInstance()->lives > 0) return;
+			if (CGame::GetInstance()->GetCurrentSceneId() >= 2 && CGame::GetInstance()->GetCurrentSceneId() <= 4) {
+				CGame::GetInstance()->TotalScore += score;
+			}
+			CGame::GetInstance()->InitiateSwitchScene(tunnelSceneId);
+			isChangingScene = false;
+		}
 		return;
 	}
 
@@ -191,11 +224,11 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		{
 			if (goomba->IsFlyable()) {
 				goomba->disableFly();
-				coin += 2;
+				score += 400;
 			}
 			else {
 				goomba->SetState(GOOMBA_STATE_DIE);
-				coin += 1;
+				score += 100;
 			}
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
@@ -352,10 +385,11 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithStar(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
-	coin += 50;
+	score += 1000;
 	SoundManager::GetInstance()->PlayMusic(L"star");
 	SetLevel(MARIO_LEVEL_UNTOUCHABLE);
 	StartUntouchable();
+	CGame::GetInstance()->lives++;
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
@@ -414,9 +448,8 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 	if (level == MARIO_LEVEL_SMALL) {
 		SetLevel(MARIO_LEVEL_BIG);
 	}
-	else {
-		coin += 10;
-	}
+	score += 800;
+	
 	SoundManager::GetInstance()->PlaySFX(L"powerup");
 }
 
@@ -744,6 +777,7 @@ void CMario::SetState(int state)
 		vx = 0;
 		ax = 0;
 		CGame::GetInstance()->isReloading = true;
+		CGame::GetInstance()->lives--;
 		break;
 	}
 

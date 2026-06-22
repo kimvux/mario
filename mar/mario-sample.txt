@@ -1,5 +1,5 @@
 [SETTINGS]
-start	3
+start	1
 width	320
 height	240
 
@@ -10,7 +10,9 @@ height	240
 1	scene01.txt
 2	scene02.txt
 3	scene03.txt
-5	scene0005.txt
+4	scene04.txt
+5	switchscene.txt
+6	endscene.txt
 
 # id	file 
 [TEXTURES]
@@ -35,7 +37,13 @@ height	240
 34	textures\Fantasy Swamp Forest\Free\BG_1\BG_1_1.png
 35	textures\Fantasy Swamp Forest\Free\BG_2\BG_2.png
 36	textures\Fantasy Swamp Forest\Free\BG_3\BG_3.png
-37	textures\Fantasy Swamp Forest\Free\Terrain_and_Props.png38	textures\png\selection.png
+37	textures\Fantasy Swamp Forest\Free\Terrain_and_Props.png
+38	textures\png\selection.png
 39	textures\Bowser.png
 40	textures\Bowser_back.png
 41	textures\Hori.png
+42	textures\png\Background_0.png
+43	textures\png\Background_1.png
+44	textures\png\Level_3__Boss.png
+1	textures\text.png
+2	textures\black.png

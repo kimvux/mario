@@ -69,7 +69,6 @@ void CPlayScene::_ParseSection_SPRITES(string line)
 		DebugOut(L"[ERROR] Texture ID %d not found!\n", texID);
 		return;
 	}
-	DebugOut(L"[INFO] Loaded sprite ID %d, texture ID %d, rect: left=%d top=%d right=%d bottom=%d\n", ID, texID, l, t, r, b);
 	CSprites::GetInstance()->Add(ID, l, t, r, b, tex);
 }
 
@@ -273,7 +272,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int targetScene = atoi(tokens[5].c_str());
 		int ani_id = atoi(tokens[6].c_str());
 		obj = new Tunnel(x, y, width, height, targetScene, ani_id);
-		DebugOut(L"[INFO] Tunnel created at x=%f, y=%f with width=%f, height=%f, targetScene=%d\n", x, y, width, height, targetScene);
 		break;
 	}
 
@@ -476,7 +474,7 @@ void CPlayScene::Update(DWORD dt)
 	cy -= game->GetBackBufferHeight() / 2;
 
 	if (cx < 0) cx = 0;
-	if (id == 1 || id == 0) {
+	if (id == 1 || id == 0 || id == 4) {
 		CGame::GetInstance()->SetCamPos(0.0f, 0.0f);
 	}
 	else

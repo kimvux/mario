@@ -10,19 +10,18 @@ Text::Text(float x, float y, int type, string text) : CGameObject(x, y) {
     this->text = text;
     cameraX = x;
     cameraY = y;
+    targetX = x;
+    targetY = y;
 }
 
 void Text::GetBoundingBox(float &l, float &t, float &r, float &b){
 
     l = x;
     r = l;
-    if (type == TEXT_TYPE_NUMBER) {
-        t = y - NUMBER_HEIGHT / 2;
-        b = y + NUMBER_HEIGHT / 2;
-    } else {
-        t = y - TEXT_HEIGHT / 2;
-        b = y + TEXT_HEIGHT / 2;
-    }
+    t = y - TEXT_HEIGHT / 2;
+    b = y + TEXT_HEIGHT / 2;
+    targetX = 0;
+    targetY = 0;
 }
 
 void Text::Render() {
@@ -36,7 +35,7 @@ void Text::Render() {
             break;
         }
        
-        case TEXT_TYPE_SCORE: {
+        case TEXT_TYPE_INSCENESCORE: {
             LPGAME game = CGame::GetInstance();
             CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
             int score = game->TotalScore + mario->score;
@@ -63,7 +62,16 @@ void Text::Render() {
         }
         
         case TEXT_TYPE_TIME: {
-            // dont have yet
+            LPGAME game = CGame::GetInstance();
+            CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+            if (!mario) return;
+            int time = mario->sceneTimer;
+            if (time < 0) time = 0;
+            string timeStr = to_string(time);
+            for (int i = 0; i < timeStr.size(); i++) {
+                int offsetX = i * CHAR_WIDTH - timeStr.size() * CHAR_WIDTH / 2 + 3 * (i - timeStr.size() / 2);
+                s->Get(static_cast<int>(timeStr[i]))->Draw(x + offsetX, y);
+            }
             break;
         }
 
@@ -71,6 +79,40 @@ void Text::Render() {
             for (int i = 0; i < text.size(); i++) {
                 int offsetX = i * CHAR_WIDTH - text.size() * CHAR_WIDTH / 2 + 3 * (i - text.size() / 2);
                 s->Get(static_cast<int>(text[i]))->Draw(x + offsetX, y);
+            }
+            break;
+        }
+
+        case TEXT_TYPE_TOTALSCORE: {
+            LPGAME game = CGame::GetInstance();
+            int score = game->TotalScore;
+
+            string scoreStr = to_string(score);
+            for (int i = 0; i < scoreStr.size(); i++) {
+                int offsetX = i * CHAR_WIDTH - scoreStr.size() * CHAR_WIDTH / 2 + 3 * (i - scoreStr.size() / 2);
+                s->Get(static_cast<int>(scoreStr[i]))->Draw(x + offsetX, y);
+            }
+            break;
+        }
+        
+        case TEXT_TYPE_NEXTSCENE: {
+            LPGAME game = CGame::GetInstance();
+
+            string nextScene = to_string(game->GetNextSceneId() - 1);
+            for (int i = 0; i < nextScene.size(); i++) {
+                int offsetX = i * CHAR_WIDTH - nextScene.size() * CHAR_WIDTH / 2 + 3 * (i - nextScene.size() / 2);
+                s->Get(static_cast<int>(nextScene[i]))->Draw(x + offsetX, y);
+            }
+            break;
+        }
+
+        case TEXT_TYPE_LIVES: {
+            LPGAME game = CGame::GetInstance();
+            int lives = game->lives;
+            string livesStr = to_string(lives);
+            for (int i = 0; i < livesStr.size(); i++) {
+                int offsetX = i * CHAR_WIDTH - livesStr.size() * CHAR_WIDTH / 2 + 3 * (i - livesStr.size() / 2);
+                s->Get(static_cast<int>(livesStr[i]))->Draw(x + offsetX, y);
             }
             break;
         }

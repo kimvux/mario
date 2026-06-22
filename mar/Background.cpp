@@ -25,6 +25,7 @@ void CBackground::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	if (z == 0) return;
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	if (!mario) return;
 	if (mario->getVx() == 0) return;
 	switch (mario->GetState()) {
 	case MARIO_STATE_WALKING_RIGHT: {

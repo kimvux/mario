@@ -172,6 +172,7 @@ class CMario : public CGameObject
 public:
 	int coin;
 	int score;
+	DWORD sceneTimer;
 	CMario(float x, float y, bool moveAble) : CGameObject(x, y)
 	{
 		isSitting = false;
@@ -188,6 +189,7 @@ public:
 		score = 0;
 		recovery = 0;
 		recoveryStart = -1;
+		sceneTimer = SCENE_TIME_OUT - (GetTickCount64() - CGame::GetInstance()->startSceneTimer)/1000;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
