@@ -8,6 +8,9 @@
 #define BULLET_BBOX_WIDTH 10
 #define BULLET_BBOX_HEIGHT 10
 
+#define ID_ANI_BULLET_HORIZONTAL 6000
+#define ID_ANI_BULLET_VERTICAL   6001
+
 
 #define BULLET_STATE_FLYING 67
 
@@ -17,7 +20,7 @@ class CBullet : public CGameObject
 protected:
 	float ax;
 	float ay;
-	bool isRight;
+	int direction;
 	bool isCollided;
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
@@ -30,6 +33,6 @@ protected:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
 public:
-	CBullet(float x, float y, bool isRight);
+	CBullet(float x, float y, int direction);
 	virtual void SetState(int state);
 };

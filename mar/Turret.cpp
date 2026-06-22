@@ -51,16 +51,16 @@ void CTurret::SpawnBullet()
 
 	switch (dir) {
 	case 1: 
-		b = new CBullet(this->x - 10, this->y - 6, false);
+		b = new CBullet(this->x - 10, this->y - 6, 2);
 		scene->AddObject(b);
 		break;
 	case 2: 
-		b = new CBullet(this->x + 10, this->y - 6, true);
+		b = new CBullet(this->x + 10, this->y - 6, 4);
 		scene->AddObject(b);
 		break;
 	case 3: 
-		CBullet * bLeft = new CBullet(this->x - 10, this->y - 6, false);
-		CBullet* bRight = new CBullet(this->x + 10, this->y - 6, true);
+		CBullet * bLeft = new CBullet(this->x - 10, this->y - 6, 4);
+		CBullet* bRight = new CBullet(this->x + 10, this->y - 6, 2);
 		scene->AddObject(bLeft);
 		scene->AddObject(bRight);
 		break;

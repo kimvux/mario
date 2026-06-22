@@ -3,10 +3,10 @@
 #include "Mario.h"
 
 
-CBullet::CBullet(float x, float y, bool isRight) :CGameObject(x, y) {
+CBullet::CBullet(float x, float y, int direction) :CGameObject(x, y) {
 	this->ax = 0;
 	this->ay = BULLET_GRAVITY;
-	this->isRight = isRight;
+	this->direction = direction;
 	SetState(BULLET_STATE_FLYING);
 	isCollided = false;
 }
@@ -22,9 +22,20 @@ void CBullet::SetState(int state) {
 	CGameObject::SetState(state);
 	switch (state) {
 	case BULLET_STATE_FLYING:
-		if (!isRight)
-			vx = -BULLET_FLYING_SPEED;
-		else vx = BULLET_FLYING_SPEED;
+		switch (direction) {
+			case 1: 
+				vy = BULLET_FLYING_SPEED;
+				break;
+			case 2:
+				vx = -BULLET_FLYING_SPEED;
+				break;
+			case 3:
+				vy = -BULLET_FLYING_SPEED;
+				break;
+			case 4: 
+				vx = BULLET_FLYING_SPEED;
+				break;
+		}
 		break;
 	}
 
@@ -44,13 +55,18 @@ void CBullet::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CBullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	x += vx * dt;
+	y += vy * dt;
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 void CBullet::Render() {
-	int aniId = 6000;
-	float s = isRight ? 1.0f : -1.0f;
-	CAnimations::GetInstance()->Get(aniId)->Render(x, y, -s);
+	int aniId;
+	if(direction == 2 || direction == 4) aniId = 6000;
+	else aniId = 6001;
+	float s ;
+	if(direction == 1 || direction == 4) s = -1;
+	else s = 1;
+	CAnimations::GetInstance()->Get(aniId)->Render(x, y, s);
 	//RenderBoundingBox();
 }

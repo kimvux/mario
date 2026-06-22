@@ -4,6 +4,10 @@ mario.txt
 brick_texture_map1.txt
 platform_texture_map1.txt
 tunnel.txt
+bowser.txt
+turret.txt
+bullet.txt
+Rflame.txt
 #
 
 [OBJECTS]
@@ -12,11 +16,12 @@ tunnel.txt
 # MARIO
 0	250	10	1
 
-# tunnel
-#type	x	y	w	h	target	ani
-14	270	280	30	30	2	69000
-14	440	280	30	30	3	69000
-14	620	280	30	30	0	69000
+#bowser
+19	620	100	620	280
+
+
+
+
 
 
 # BRICKS

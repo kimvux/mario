@@ -20,6 +20,9 @@
 #include "Mushroom.h"
 #include "Hammer.h"
 #include "HammerTurtle.h"
+#include "Bowser.h"
+#include "Rflame.h"
+#include "Tunnel.h"
 
 #include "Collision.h"
 
@@ -93,6 +96,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
+int deflect_jump_count = 2;
 void CMario::OnNoCollision(DWORD dt)
 {
 	x += vx * dt;
@@ -113,6 +117,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		if (e->ny < 0) {
 			isOnPlatform = true;
 			jumpCount = 0;
+			deflect_jump_count = 2;
 			dashCount = 0;
 			if (dynamic_cast<Tunnel*>(e->obj)) {
 				isOnTunnel = true;
@@ -159,6 +164,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithMushroom(e);
 	else if (dynamic_cast<Hammer*>(e->obj) || dynamic_cast<HammerTurtle*>(e->obj))
 		OnCollisionWithHammer(e);
+	else if (dynamic_cast<CBowser*>(e->obj))
+		OnCollisionWithBowser(e);
+	else if (dynamic_cast<RFlame*>(e->obj))
+		OnCollisionWithRFlame(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -196,6 +205,81 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	}
 	if (level == MARIO_LEVEL_UNTOUCHABLE)
 		e->obj->Delete();
+}
+void CMario::OnCollisionWithRFlame(LPCOLLISIONEVENT e) {
+	if (isDashing) return;
+	RFlame* flame = dynamic_cast<RFlame*>(e->obj);
+
+	if (e->ny < 0)
+	{
+		vy = -MARIO_JUMP_DEFLECT_SPEED;
+		e->obj->Delete();
+	}
+	else 
+	{
+		if (recovery == 0 && !untouchable)
+		{
+			if (level > MARIO_LEVEL_SMALL)
+			{
+				level = MARIO_LEVEL_SMALL;
+				StartRecovery();
+			}
+			else
+			{
+				DebugOut(L">>> Mario DIE >>> \n");
+				SetState(MARIO_STATE_DIE);
+			}
+		}
+	}
+	if (level == MARIO_LEVEL_UNTOUCHABLE)
+		e->obj->Delete();
+}
+void CMario::OnCollisionWithBowser(LPCOLLISIONEVENT e)
+{
+	if (isDashing) return;
+	CBowser* bowser = dynamic_cast<CBowser*>(e->obj);
+
+	if (e->ny < 0)
+	{
+		if (deflect_jump_count > 0) {
+			int hp = bowser->GetHp();
+			if (hp > 1) bowser->takeDmg();
+			else e->obj->Delete();
+			vy = -MARIO_JUMP_DEFLECT_SPEED * 1.2;
+			deflect_jump_count--;
+		}
+		else {
+			if (recovery == 0 && !untouchable)
+			{
+				if (level > MARIO_LEVEL_SMALL)
+				{
+					level = MARIO_LEVEL_SMALL;
+					StartRecovery();
+				}
+				else
+				{
+					DebugOut(L">>> Mario DIE >>> \n");
+					SetState(MARIO_STATE_DIE);
+				}
+			}
+		}
+	}
+	else
+	{
+		if (recovery == 0 && !untouchable)
+		{
+			if (level > MARIO_LEVEL_SMALL)
+			{
+				level = MARIO_LEVEL_SMALL;
+				StartRecovery();
+			}
+			else
+			{
+				DebugOut(L">>> Mario DIE >>> \n");
+				SetState(MARIO_STATE_DIE);
+			}
+		}
+	}
 }
 
 void CMario::OnCollisionWithBullet(LPCOLLISIONEVENT e)

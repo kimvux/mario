@@ -12,6 +12,7 @@ star.txt
 coin.txt
 brick.txt
 flower.txt
+bowser.txt
 #
 [OBJECTS]
 
@@ -68,6 +69,8 @@ flower.txt
 
 #hammer turtle
 17	4400	20	4000	4600	1000	0.15
+
+
 
 #flower
 13	1280	300

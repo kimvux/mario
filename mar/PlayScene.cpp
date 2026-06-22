@@ -21,6 +21,8 @@
 #include "Mushroom.h"
 #include "HammerTurtle.h"
 #include "Hammer.h"
+#include "Bowser.h"
+#include "RFlame.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -182,7 +184,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int dir = atoi(tokens[3].c_str());
 		obj = new CTurret(x, y, dir);
 
-		DebugOut(L"[INFO] Turret created at x=%f, y=%f with dir=%d\n", x, y, dir);
 		break;
 	}
 	case OBJECT_TYPE_BULLET:
@@ -191,8 +192,19 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		if (tokens.size() < 4) return;
 
-		bool z = atoi(tokens[3].c_str());
+		int z = atoi(tokens[3].c_str());
 		obj = new CBullet(x, y, z);
+
+		break;
+	}
+
+	case OBJECT_TYPE_RFLAME:
+	{
+
+		if (tokens.size() < 4) return;
+
+		bool z = atoi(tokens[3].c_str());
+		obj = new RFlame(x, y, z);
 
 		break;
 	}
@@ -204,6 +216,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 
+	case OBJECT_TYPE_BOWSER:
+	{
+		if (tokens.size() < 3) return;
+
+		obj = new CBowser(x, y);
+		break;
+	}
 
 
 	case OBJECT_TYPE_PLATFORM:

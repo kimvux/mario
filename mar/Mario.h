@@ -147,6 +147,8 @@ class CMario : public CGameObject
 	void OnCollisionWithTurtle(LPCOLLISIONEVENT e);
 	void OnCollisionWithMushroom(LPCOLLISIONEVENT e);
 	void OnCollisionWithHammer(LPCOLLISIONEVENT e);
+	void OnCollisionWithBowser(LPCOLLISIONEVENT e);
+	void OnCollisionWithRFlame(LPCOLLISIONEVENT e);
 	
 	float tunnelTimer = 0;
 	bool isOnTunnel = false;
