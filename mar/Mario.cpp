@@ -40,16 +40,19 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (!isChangingScene) {
 		sceneTimer = SCENE_TIME_OUT - (GetTickCount64() - CGame::GetInstance()->startSceneTimer) / 1000;
-		if (sceneTimer <= 0 && (CGame::GetInstance()->GetCurrentSceneId() < 2 || CGame::GetInstance()->GetCurrentSceneId() > 4)) {
-			if (sceneTimer < 0) sceneTimer = 0;
+		if (sceneTimer <= 0 && CGame::GetInstance()->GetCurrentSceneId() >= 2 && CGame::GetInstance()->GetCurrentSceneId() <= 4) {
+			DebugOut(L"scene: %d\n", CGame::GetInstance()->GetCurrentSceneId());
 			SetState(MARIO_STATE_DIE);
-			return;
+			CGame::GetInstance()->lives = 0;
 		}
 	}
 		
 	
 	if (y > 500) {
-		SetState(MARIO_STATE_DIE);
+		if (CGame::GetInstance()->GetCurrentSceneId() >= 2 && CGame::GetInstance()->GetCurrentSceneId() <= 4)
+			SetState(MARIO_STATE_DIE);
+		else
+			y = 0;
 		return;
 	}
 	if (!moveAble) return;
@@ -293,7 +296,11 @@ void CMario::OnCollisionWithBowser(LPCOLLISIONEVENT e)
 		if (deflect_jump_count > 0) {
 			int hp = bowser->GetHp();
 			if (hp > 1) bowser->takeDmg();
-			else e->obj->Delete();
+			else {
+				Tunnel* finishTunnel = new Tunnel(360, 295, 30, 30, 7, 69000);
+				((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->AddObject(finishTunnel);
+				e->obj->Delete();
+			}
 			vy = -MARIO_JUMP_DEFLECT_SPEED * 1.2;
 			deflect_jump_count--;
 		}
@@ -778,6 +785,7 @@ void CMario::SetState(int state)
 		ax = 0;
 		CGame::GetInstance()->isReloading = true;
 		CGame::GetInstance()->lives--;
+		SoundManager::GetInstance()->PlayMusic(L"mariodie");
 		break;
 	}
 

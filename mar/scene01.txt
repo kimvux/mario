@@ -13,7 +13,6 @@ text.txt
 # MARIO
 0	200	10	1
 
-
 # tunnel
 #type	x	y	w	h	target	ani
 14	270	280	30	30	2	69000

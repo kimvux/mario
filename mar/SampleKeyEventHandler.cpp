@@ -34,6 +34,9 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_R: // reset
 		CGame::GetInstance()->ReloadCurrentScene();
 		break;
+	case DIK_T:
+		CGame::GetInstance()->InitiateSwitchScene(1);
+		break;
 	}
 }
 

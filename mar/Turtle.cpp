@@ -1,5 +1,6 @@
 #include "Turtle.h"
 #include "Brick.h"
+#include "SoundManager.h"
 
 Turtle::Turtle(float x, float y, float left, float right) :CGameObject(x, y)
 {
@@ -53,6 +54,7 @@ void Turtle::OnCollisionWith(LPCOLLISIONEVENT e)
 			CBrick* br = dynamic_cast<CBrick*>(e->obj);
 			if (br->isDeleteAfterBound()) {
 				br->boundUp();
+				SoundManager::GetInstance()->PlaySFX(L"breakblock");
 			}
 		}
 		vx = -vx;

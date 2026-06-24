@@ -18,7 +18,7 @@ using namespace std;
 #define KEYBOARD_BUFFER_SIZE 1024
 #define KEYBOARD_STATE_SIZE 256
 
-#define RELOAD_TIME 100
+#define RELOAD_TIME 180
 #define SWITCH_SCENE_TIME 200
 #define SCENE_TIME_OUT 300
 
@@ -123,11 +123,10 @@ public:
 	bool isReloading = false;
 
 	int TotalScore = 0;
-	DWORD startSceneTimer = GetTickCount();
+	DWORD startSceneTimer = GetTickCount64();
 	int lives = 3;
 	
-	bool IsTimeUp() { return (GetTickCount() - startSceneTimer) >= SCENE_TIME_OUT; }
-	void ResetSceneTimer() { startSceneTimer = GetTickCount(); }
+	void ResetSceneTimer() { startSceneTimer = GetTickCount64(); }
 	void ResetLives() { lives = 3; }
 	~CGame();
 };

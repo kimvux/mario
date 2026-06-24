@@ -25,6 +25,7 @@ protected:
     float cameraY;
     float targetX;
     float targetY;
+    int preTotalScore;
 public:
     Text(float x, float y, int type, string text = "");
     void Render();

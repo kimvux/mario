@@ -38,8 +38,6 @@ HOW TO INSTALL Microsoft.DXSDK.D3DX
 #define SCREEN_WIDTH 720
 #define SCREEN_HEIGHT 450
 
-bool clickable = true;
-
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message) {
@@ -73,9 +71,8 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		return TRUE;
 	}
 	case WM_LBUTTONDOWN: {
-		if (clickable) {
+		if (CGame::GetInstance()->GetCurrentSceneId() == 0 || CGame::GetInstance()->GetCurrentSceneId() == 6 || CGame::GetInstance()->GetCurrentSceneId() == 7) {
 			CGame::GetInstance()->InitiateSwitchScene(1);
-			clickable = false;
 		}
 		
 		return 0;

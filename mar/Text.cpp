@@ -12,6 +12,7 @@ Text::Text(float x, float y, int type, string text) : CGameObject(x, y) {
     cameraY = y;
     targetX = x;
     targetY = y;
+    preTotalScore = CGame::GetInstance()->TotalScore;
 }
 
 void Text::GetBoundingBox(float &l, float &t, float &r, float &b){
@@ -36,9 +37,8 @@ void Text::Render() {
         }
        
         case TEXT_TYPE_INSCENESCORE: {
-            LPGAME game = CGame::GetInstance();
             CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-            int score = game->TotalScore + mario->score;
+            int score = preTotalScore + mario->score;
             
             string scoreStr = to_string(score);
             for (int i = 0; i < scoreStr.size(); i++) {

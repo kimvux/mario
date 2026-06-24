@@ -515,24 +515,29 @@ void CGame::SwitchScene()
 		if (timer >= RELOAD_TIME) {
 			isReloading = false;
 			timer = 0;
+			if (lives <= 0) {
+				next_scene = 6;
+				SoundManager::GetInstance()->PlaySFX(L"gameover");
+			}
+			SoundManager::GetInstance()->PlayMusic(to_wstring(current_scene));
 			ReloadCurrentScene();
 		}
 		return;
 	}
 	if (isSwitchingScene) {
 		switchSceneTimer += 1 * isSwitchingScene;
+		SetCamPos(0.0f, 0.0f);
 		if (switchSceneTimer >= SWITCH_SCENE_TIME) {
 			isSwitchingScene = false;
 			switchSceneTimer = 0;
-			ResetLives();
 		}
 		return;
 	}
-	//if (lives == 0 && !isSwitchingScene) next_scene = 6;
+	
 	if (next_scene < 0 || next_scene == current_scene) return;
-
+	SetCamPos(0.0f, 0.0f);
 	DebugOut(L"[INFO] Switching to scene %d\n", next_scene);
-
+	ResetLives();
 	if (scenes[current_scene] != NULL)
 		scenes[current_scene]->Unload();
 
@@ -566,9 +571,12 @@ void CGame::InitiateSwitchScene(int scene_id)
 		isSwitchingScene = true;
 		switchSceneTimer = 0;
 		LPSCENE s = scenes[5];
+		scenes[current_scene]->Unload();
 		current_scene = 5;
 		s->Load();
 	}
+	if (current_scene == 6 || current_scene == 7)
+		TotalScore = 0;
 	next_scene = scene_id;
 }
 

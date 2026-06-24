@@ -9,6 +9,7 @@ bowser.txt
 bullet.txt
 Rflame.txt
 star.txt
+tunnel.txt
 #
 
 [OBJECTS]

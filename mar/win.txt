@@ -1,0 +1,33 @@
+# list of object assets to load in this scene
+[ASSETS]
+mario.txt
+background.txt
+text.txt
+firework.txt
+coin.txt
+#
+[OBJECTS]
+
+#Background
+#type	x	y	z	cw	ch	l	h	ani	moveY
+8	360	225	0	720	450	11	1	700023	0
+8	180	150	0	1	1	1	1	90000	-20
+8	130	10	0	1	1	1	1	90000	-50
+8	70	340	0	1	1	1	1	90000	-13
+8	10	600	0	1	1	1	1	90000	-33
+8	600	512	0	1	1	1	1	90000	-43
+8	520	710	0	1	1	1	1	90000	-23
+8	650	710	0	1	1	1	1	90000	-26
+8	690	710	0	1	1	1	1	90000	-33
+
+
+
+
+#text
+#type	x	y	type	text
+22	360	100	1	congratulation
+22	360	120	1	you win
+22	280	200	1	score
+22	360	300	1	click anywhere
+
+22	440	200	6	0

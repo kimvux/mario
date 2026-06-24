@@ -21,4 +21,5 @@ public:
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	int GetTargetScene() { return targetScene; }
+	void SetY(float y) { this->y = y; }
 };
