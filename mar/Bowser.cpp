@@ -13,54 +13,60 @@ void CBowser::GetBoundingBox(float& left, float& top, float& right, float& botto
 	bottom = top + BOWSER_BBOX_HEIGHT;
 }
 
-void CBowser::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {	
-	if (isCrashing) {
-		if (GetTickCount64() - last_attack < 1000) {
-			vx = direction * CrashingSpeed * 0.05;
-			vy = 0;
-		}
-		else {
-			vx = -direction * CrashingSpeed;
-			vy = 0;
+void CBowser::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {		
+	if (isAttacking) {
+		if (isCrashing) {
+			if (GetTickCount64() - last_attack < 1000) {
+				vx = direction * CrashingSpeed * 0.05;
+				vy = 0;
+			}
+			else {
+				vx = -direction * CrashingSpeed;
+				vy = 0;
 
-			if (GetTickCount64() - last_attack > CrashingTime)
-			{
-				isCrashing = false;
-				vx = vx / 2;
+				if (GetTickCount64() - last_attack > CrashingTime)
+				{
+					isCrashing = false;
+					vx = vx / 2;
+				}
 			}
 		}
-	}
-	else {
 		if (isShooting) {
 			vx = 0;
 			vy = 0;
-
 			if (GetTickCount64() - last_attack > shootTime)
-			{
 				isShooting = false;
-			}
 		}
-		else {
-			if (GetTickCount64() - last_change_time > change_time) {
-				if (state < 77004) state++;
-				else state = 77001;
-				last_change_time = GetTickCount64();
-			}
-			CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
-			LPGAMEOBJECT mario = scene->GetPlayer();
-			if (mario != NULL) {
-				float m_x, m_y;
-				mario->GetPosition(m_x, m_y);
-				if (abs(m_x - this->x) > 30)
-					if (m_x < this->x) {
-						vx = -BOWSER_WALKING_SPEED;
-						direction = 1;
-					}
-					else {
-						vx = BOWSER_WALKING_SPEED;
-						direction = -1;
-					}
-			}
+		if (isBreathingFlame) {
+			vx = 0;
+			vy = 0;
+			if (GetTickCount64() - last_attack > shootTime)
+				isBreathingFlame = false;
+		}
+			
+	}
+	if(!isAttacking){
+		if (GetTickCount64() - last_change_time > change_time) {
+			if (state < 77004) state++;
+			else state = 77001;
+			last_change_time = GetTickCount64();
+		}
+	}
+	if(!isCrashing){
+		CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+		LPGAMEOBJECT mario = scene->GetPlayer();
+		if (mario != NULL) {
+			float m_x, m_y;
+			mario->GetPosition(m_x, m_y);
+			if (abs(m_x - this->x) > 30)
+				if (m_x < this->x) {
+					vx = -BOWSER_WALKING_SPEED;
+					direction = 1;
+				}
+				else {
+					vx = BOWSER_WALKING_SPEED;
+					direction = -1;
+				}
 		}
 	}
 	if (GetTickCount64() - last_attack > Attack_Time) {
@@ -76,8 +82,6 @@ void CBowser::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		else if (random_num == 2) {
 			Shooting();
 		}
-
-		
 	}
 	vy += ay * dt;
 	CGameObject::Update(dt, coObjects);
@@ -89,10 +93,14 @@ void CBowser::Render()
 	int aniId = state;
 	if(direction == -1) aniId  += 1000;
 
+	if(isBreathingFlame) aniId = BOWSER_STATE_BREATH;
 	LPANIMATION ani = CAnimations::GetInstance()->Get(aniId);
 
 	if (ani != NULL) {
-		ani->Render(x, y, 0.25f);
+		float scale;
+		if(isBreathingFlame) scale = 0.095f;
+		else scale = 0.25;
+		ani->Render(x, y, scale);
 	}
 	else {
 
@@ -135,6 +143,7 @@ void CBowser::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CBowser::Crashing()
 {
+	isAttacking = 1;
 	isCrashing = 1;
 	last_attack = GetTickCount64();
 }
@@ -142,6 +151,7 @@ void CBowser::Crashing()
 void CBowser::Shooting()
 {
 	isShooting = 1;
+	isAttacking = 1;
 	CBullet* Bullet1 = new CBullet(x + 80, y - 500, 1);
 	CBullet* Bullet2 = new CBullet(x - 90, y, 3);
 	CBullet* Bullet3 = new CBullet(x + 75, y, 3);
@@ -156,6 +166,8 @@ void CBowser::Shooting()
 
 void CBowser::BreathFlame()
 {
+	isBreathingFlame = 1;
+	isAttacking = 1;
 	RFlame* flame1 = new RFlame(x, y, 1);
 	RFlame* flame2 = new RFlame(x, y, 0);
 	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();

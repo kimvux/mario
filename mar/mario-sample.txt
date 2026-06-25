@@ -46,6 +46,8 @@ height	240
 42	textures\png\Background_0.png
 43	textures\png\Background_1.png
 44	textures\png\Level_3__Boss.png
+45	textures\Bowser_shoot.png
+
 1	textures\text.png
 2	textures\black.png
 3	textures\Firework\Rocket_Orange-sheet.png

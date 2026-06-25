@@ -20,6 +20,8 @@
 #define BOWSER_STATE_WALKING_BACK_3 78003
 #define BOWSER_STATE_WALKING_BACK_4 78004
 
+#define BOWSER_STATE_BREATH 80001
+
 #define change_time 1000
 #define Attack_Time 5000
 #define CrashingSpeed 0.6
@@ -37,9 +39,10 @@ protected:
     int direction = 1;
     ULONGLONG last_change_time;
     ULONGLONG last_attack;
-    bool attacking = 0;
+    bool isAttacking = 0;
     bool isCrashing = 0;
     bool isShooting = 0;
+    bool isBreathingFlame = 0;
     
 public:
     CBowser(float x, float y) : CGameObject(x, y) {
@@ -51,7 +54,7 @@ public:
         SetState(BOWSER_STATE_WALKING_1);
         last_change_time = GetTickCount64();
         last_attack = GetTickCount64();
-        attacking = 0;
+        isAttacking = 0;
     }
     virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
     virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
