@@ -25,6 +25,7 @@
 #include "Collision.h"
 #include "Bowser.h"
 #include "Rflame.h"
+#include "FFLame.h"
 #include "PopUpScore.h"
 
 int jumpCount = 0;
@@ -219,6 +220,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithBowser(e);
 	else if (dynamic_cast<RFlame*>(e->obj))
 		OnCollisionWithRFlame(e);
+	else if (dynamic_cast<FFlame*>(e->obj))
+		OnCollisionWithFFlame(e);
 	else if (dynamic_cast<EatingFlowerMovable*>(e->obj))
 		OnCollisionWithFlower(e);
 	else if (dynamic_cast<SpikeTurtle*>(e->obj))
@@ -313,6 +316,42 @@ void CMario::OnCollisionWithRFlame(LPCOLLISIONEVENT e) {
 		}
 	}
 	if (level == MARIO_LEVEL_UNTOUCHABLE){
+		score += 100;
+		PopUpScore* pop = new PopUpScore(e->obj->getX(), e->obj->getY() - 20, 1100);
+		((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->AddObject(pop);
+		e->obj->Delete();
+	}
+}
+
+void CMario::OnCollisionWithFFlame(LPCOLLISIONEVENT e) {
+	if (isDashing) return;
+	FFlame* flame = dynamic_cast<FFlame*>(e->obj);
+
+	if (e->ny < 0)
+	{
+		vy = -MARIO_JUMP_DEFLECT_SPEED;
+		score += 100;
+		PopUpScore* pop = new PopUpScore(e->obj->getX(), e->obj->getY() - 20, 1100);
+		((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->AddObject(pop);
+		e->obj->Delete();
+	}
+	else
+	{
+		if (recovery == 0 && !untouchable)
+		{
+			if (level > MARIO_LEVEL_SMALL)
+			{
+				level = MARIO_LEVEL_SMALL;
+				StartRecovery();
+			}
+			else
+			{
+				DebugOut(L">>> Mario DIE >>> \n");
+				SetState(MARIO_STATE_DIE);
+			}
+		}
+	}
+	if (level == MARIO_LEVEL_UNTOUCHABLE) {
 		score += 100;
 		PopUpScore* pop = new PopUpScore(e->obj->getX(), e->obj->getY() - 20, 1100);
 		((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->AddObject(pop);

@@ -1,12 +1,14 @@
 #include "FFlame.h"
 #include "PlayScene.h"
 
-FFlame::FFlame(float x, float y, bool direction) {
+FFlame::FFlame(float x, float y) {
 	this->ax = 0;
-	this->ay = FFLAME_GRAVITY;
+	this->ay = 0; 
+	this->vx = 0.05f; 
+	this->vy = -0.05f;
 	this->x = x;
 	this->y = y;
-	this->direction = direction;
+
 	state = ID_FLYING_FLAME_1;
 	birth_time = GetTickCount64();
 }
@@ -20,15 +22,20 @@ void FFlame::GetBoundingBox(float& left, float& top, float& right, float& bottom
 }
 
 void FFlame::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
-	if (GetTickCount64() > birth_time + 5000) Delete();
-	if (direction == 0) vx = FFLAME_FLYING_SPEED;
-	else vx = -FFLAME_FLYING_SPEED;
+	if (GetTickCount64() > birth_time + 10000) Delete();
+	if (GetTickCount64() > last_change_direction) {
+		srand((unsigned)time(nullptr));
+		vx = ((rand() % 100) / 100.0f) * 0.3f - 0.15f;
+		vy = ((rand() % 100) / 100.0f) * 0.3f - 0.15f;
+
+		last_change_direction = GetTickCount64();
+	}
+
 	if (GetTickCount64() - last_change_time > 250) {
 		state++;
-		if (state > 79004) state = 79002;
+		if (state > 81002) state = 81001;
 		last_change_time = GetTickCount64();
 	}
-	vy += ay * dt;
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -55,7 +62,6 @@ void FFlame::OnNoCollision(DWORD dt)
 void FFlame::Render()
 {
 	int aniId = state;
-	if (direction == 0) aniId += 100;
 	LPANIMATION ani = CAnimations::GetInstance()->Get(aniId);
 
 

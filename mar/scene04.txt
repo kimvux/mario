@@ -8,6 +8,7 @@ brick_texture_map2.txt
 bowser.txt
 bullet.txt
 Rflame.txt
+FFLame.txt
 star.txt
 tunnel.txt
 #

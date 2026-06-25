@@ -20,6 +20,7 @@ protected:
 	int state;
 	ULONGLONG last_change_time;
 	ULONGLONG birth_time;
+	ULONGLONG last_change_direction;
 
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
@@ -33,7 +34,7 @@ protected:
 
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 public:
-	FFlame(float x, float y, bool direction);
+	FFlame(float x, float y);
 	virtual void SetState(int state);
 };
 

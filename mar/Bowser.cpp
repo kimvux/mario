@@ -3,6 +3,7 @@
 #include "PlayScene.h"
 #include "Bullet.h"
 #include "RFlame.h"
+#include "FFlame.h"
 
 
 void CBowser::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -34,13 +35,18 @@ void CBowser::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		if (isShooting) {
 			vx = 0;
 			vy = 0;
-			if (GetTickCount64() - last_attack > shootTime)
+			if (GetTickCount64() - last_shot > 2000) {
+				ShootAgain();
+			}
+
+			if (GetTickCount64() - last_attack > shootTime) {
 				isShooting = false;
+			}
 		}
 		if (isBreathingFlame) {
 			vx = 0;
 			vy = 0;
-			if (GetTickCount64() - last_attack > shootTime)
+			if (GetTickCount64() - last_attack > breathTime)
 				isBreathingFlame = false;
 		}
 			
@@ -73,13 +79,17 @@ void CBowser::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		srand((unsigned)time(nullptr));
 		int random_num = rand();
 		random_num %= 3;
+		isAttacking = 1;
 		if (random_num == 0) {
+			isBreathingFlame = 1;
 			BreathFlame();
 		}
 		else if (random_num == 1) {
+			isCrashing = 1;
 			Crashing();
 		}
 		else if (random_num == 2) {
+			isShooting = 1;
 			Shooting();
 		}
 	}
@@ -143,15 +153,12 @@ void CBowser::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CBowser::Crashing()
 {
-	isAttacking = 1;
-	isCrashing = 1;
 	last_attack = GetTickCount64();
 }
 
 void CBowser::Shooting()
 {
-	isShooting = 1;
-	isAttacking = 1;
+	last_shot = GetTickCount64();
 	CBullet* Bullet1 = new CBullet(x + 80, y - 500, 1);
 	CBullet* Bullet2 = new CBullet(x - 90, y, 3);
 	CBullet* Bullet3 = new CBullet(x + 75, y, 3);
@@ -164,15 +171,31 @@ void CBowser::Shooting()
 	last_attack = GetTickCount64();
 }
 
+void CBowser::ShootAgain()
+{
+	last_shot = GetTickCount64();
+	CBullet* Bullet1 = new CBullet(x + 80, y - 500, 1);
+	CBullet* Bullet2 = new CBullet(x - 90, y, 3);
+	CBullet* Bullet3 = new CBullet(x + 75, y, 3);
+	CBullet* Bullet4 = new CBullet(x - 95, y - 500, 1);
+	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	scene->AddObject(Bullet1);
+	scene->AddObject(Bullet2);
+	scene->AddObject(Bullet3);
+	scene->AddObject(Bullet4);
+}
+
 void CBowser::BreathFlame()
 {
-	isBreathingFlame = 1;
-	isAttacking = 1;
-	RFlame* flame1 = new RFlame(x, y, 1);
-	RFlame* flame2 = new RFlame(x, y, 0);
+	RFlame* flame1 = new RFlame(x, y -10, 1);
+	RFlame* flame2 = new RFlame(x, y - 10, 0);
+	FFlame* flame3 = new FFlame(x, y - 10);
+	FFlame* flame4 = new FFlame(x, y - 10);
 	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
 	scene->AddObject(flame1);
 	scene->AddObject(flame2);
+	scene->AddObject(flame3);
+	scene->AddObject(flame4);
 	last_attack = GetTickCount64();
 }
 

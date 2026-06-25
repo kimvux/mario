@@ -26,7 +26,8 @@
 #define Attack_Time 5000
 #define CrashingSpeed 0.6
 #define CrashingTime 1900
-#define shootTime 1500
+#define shootTime 5000
+#define breathTime 1500
 
 class CBowser : public CGameObject
 {
@@ -39,6 +40,7 @@ protected:
     int direction = 1;
     ULONGLONG last_change_time;
     ULONGLONG last_attack;
+    ULONGLONG last_shot;
     bool isAttacking = 0;
     bool isCrashing = 0;
     bool isShooting = 0;
@@ -66,6 +68,7 @@ public:
     virtual void SetState(int state);
     void Crashing();
     void Shooting();
+    void ShootAgain();
     void BreathFlame();
     void takeDmg();
     int GetHp();

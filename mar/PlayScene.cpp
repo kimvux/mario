@@ -27,6 +27,7 @@
 #include "Text.h"
 #include "Bowser.h"
 #include "RFlame.h"
+#include "FFlame.h"		
 
 #include "SampleKeyEventHandler.h"
 

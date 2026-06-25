@@ -151,6 +151,7 @@ class CMario : public CGameObject
 	void OnCollisionWithHammer(LPCOLLISIONEVENT e);
 	void OnCollisionWithBowser(LPCOLLISIONEVENT e);
 	void OnCollisionWithRFlame(LPCOLLISIONEVENT e);
+	void OnCollisionWithFFlame(LPCOLLISIONEVENT e);
 	void OnCollisionWithSpikeTurtle(LPCOLLISIONEVENT e);
 	
 	float tunnelTimer = 0;
