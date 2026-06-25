@@ -167,6 +167,7 @@
     <ClCompile Include="PlatformMovableX.cpp" />
     <ClCompile Include="PlatformMovableY.cpp" />
     <ClCompile Include="PlayScene.cpp" />
+    <ClCompile Include="PopUpScore.cpp" />
     <ClCompile Include="Portal.cpp" />
     <ClCompile Include="RFlame.cpp" />
     <ClCompile Include="SampleKeyEventHandler.cpp" />
@@ -210,6 +211,7 @@
     <ClInclude Include="PlatformMovableX.h" />
     <ClInclude Include="PlatformMovableY.h" />
     <ClInclude Include="PlayScene.h" />
+    <ClInclude Include="PopUpScore.h" />
     <ClInclude Include="Portal.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="RFlame.h" />
