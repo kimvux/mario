@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "debug.h"
+#include "PopUpScore.h"
 
 CGoomba::CGoomba(float x, float y, float leftEdge, float rightEdge, int isFlyable) :CGameObject(x, y)
 {
@@ -148,5 +149,14 @@ void CGoomba::getHitByTurtleShell() {
 	vx = 0;
 	vy = -0.3f;
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-	mario->score += 200;
+	PopUpScore* pop;
+	if (isFlyable){
+		mario->score += 400;
+		pop = new PopUpScore(x, y - 20, 400);
+	}
+	else {
+		mario->score += 200;
+		pop = new PopUpScore(x, y - 20, 200);
+	}
+	((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->AddObject(pop);	
 }

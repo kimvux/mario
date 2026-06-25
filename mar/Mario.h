@@ -127,6 +127,7 @@
 #define MARIO_UNTOUCHABLE_TIME 10000
 #define MARIO_RECOVERY_TIME 2000
 #define MARIO_TUNNEL_TIME 1000
+#define DELAY_TIME 1
 
 class CMario : public CGameObject
 {
@@ -173,6 +174,8 @@ public:
 	int coin;
 	int score;
 	DWORD sceneTimer;
+	DWORD delayTimer;
+	bool isDelaying;
 	CMario(float x, float y, bool moveAble) : CGameObject(x, y)
 	{
 		isSitting = false;
@@ -190,6 +193,7 @@ public:
 		recovery = 0;
 		recoveryStart = -1;
 		sceneTimer = SCENE_TIME_OUT - (GetTickCount64() - CGame::GetInstance()->startSceneTimer)/1000;
+		isDelaying = false;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
