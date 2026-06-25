@@ -25,7 +25,7 @@
 #include "Collision.h"
 #include "Bowser.h"
 #include "Rflame.h"
-#include "Tunnel.h"
+#include "PopUpScore.h"
 
 int jumpCount = 0;
 int dashCount = 0;
@@ -121,11 +121,20 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		else {
 			if (coin > 0 || sceneTimer > 0 || CGame::GetInstance()->lives > 0) return;
-			if (CGame::GetInstance()->GetCurrentSceneId() >= 2 && CGame::GetInstance()->GetCurrentSceneId() <= 4) {
-				CGame::GetInstance()->TotalScore += score;
+			if (!isDelaying) {
+				isDelaying = true;
+				delayTimer = GetTickCount64();
 			}
-			CGame::GetInstance()->InitiateSwitchScene(tunnelSceneId);
-			isChangingScene = false;
+			else {
+				if (DELAY_TIME - (GetTickCount64() - delayTimer) / 1000 <= 0) {
+					if (CGame::GetInstance()->GetCurrentSceneId() >= 2 && CGame::GetInstance()->GetCurrentSceneId() <= 4) {
+						CGame::GetInstance()->TotalScore += score;
+					}
+					CGame::GetInstance()->InitiateSwitchScene(tunnelSceneId);
+					isChangingScene = false;
+					return;
+				}
+			}
 		}
 		return;
 	}
@@ -228,10 +237,14 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 			if (goomba->IsFlyable()) {
 				goomba->disableFly();
 				score += 400;
+				PopUpScore* pop = new PopUpScore(goomba->getX(), goomba->getY() - 20, 400);
+				((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->AddObject(pop);
 			}
 			else {
 				goomba->SetState(GOOMBA_STATE_DIE);
 				score += 100;
+				PopUpScore* pop = new PopUpScore(goomba->getX(), goomba->getY() - 20, 1100);
+				((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->AddObject(pop);
 			}
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
@@ -255,8 +268,21 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 			}
 		}
 	}
-	if (level == MARIO_LEVEL_UNTOUCHABLE)
+	if (level == MARIO_LEVEL_UNTOUCHABLE){
+		if (goomba->IsFlyable()) {
+			goomba->disableFly();		
+			score += 400;
+			PopUpScore* pop = new PopUpScore(goomba->getX(), goomba->getY() - 20, 400);
+			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->AddObject(pop);
+		}
+		else {
+			goomba->SetState(GOOMBA_STATE_DIE);
+			score += 100;
+			PopUpScore* pop = new PopUpScore(goomba->getX(), goomba->getY() - 20, 1100);
+			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->AddObject(pop);
+		}
 		e->obj->Delete();
+	}
 }
 void CMario::OnCollisionWithRFlame(LPCOLLISIONEVENT e) {
 	if (isDashing) return;
@@ -265,6 +291,9 @@ void CMario::OnCollisionWithRFlame(LPCOLLISIONEVENT e) {
 	if (e->ny < 0)
 	{
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
+		score += 100;
+		PopUpScore* pop = new PopUpScore(e->obj->getX(), e->obj->getY() - 20, 1100);
+		((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->AddObject(pop);
 		e->obj->Delete();
 	}
 	else 
@@ -283,8 +312,12 @@ void CMario::OnCollisionWithRFlame(LPCOLLISIONEVENT e) {
 			}
 		}
 	}
-	if (level == MARIO_LEVEL_UNTOUCHABLE)
+	if (level == MARIO_LEVEL_UNTOUCHABLE){
+		score += 100;
+		PopUpScore* pop = new PopUpScore(e->obj->getX(), e->obj->getY() - 20, 1100);
+		((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->AddObject(pop);
 		e->obj->Delete();
+	}
 }
 void CMario::OnCollisionWithBowser(LPCOLLISIONEVENT e)
 {
@@ -393,6 +426,8 @@ void CMario::OnCollisionWithStar(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
 	score += 1000;
+	PopUpScore* pop = new PopUpScore(e->obj->getX(), e->obj->getY() - 20, 1000);
+	((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->AddObject(pop);
 	SoundManager::GetInstance()->PlayMusic(L"star");
 	SetLevel(MARIO_LEVEL_UNTOUCHABLE);
 	StartUntouchable();
@@ -418,6 +453,9 @@ void CMario::OnCollisionWithTurtle(LPCOLLISIONEVENT e)
 		{
 			turtle->Kill();
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			score += 200;
+			PopUpScore* pop = new PopUpScore(turtle->getX(), turtle->getY() - 20, 200);
+			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->AddObject(pop);
 		}
 		else {
 			turtle->slide(nx);
@@ -444,6 +482,9 @@ void CMario::OnCollisionWithTurtle(LPCOLLISIONEVENT e)
 		}
 		if (untouchable && !turtle->IsDie()) {
 			turtle->Kill();
+			score += 200;
+			PopUpScore* pop = new PopUpScore(turtle->getX(), turtle->getY() - 20, 200);
+			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->AddObject(pop);
 		}
 	}
 }
@@ -456,7 +497,8 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 		SetLevel(MARIO_LEVEL_BIG);
 	}
 	score += 800;
-	
+	PopUpScore* pop = new PopUpScore(e->obj->getX(), e->obj->getY() - 20, 800);
+	((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->AddObject(pop);
 	SoundManager::GetInstance()->PlaySFX(L"powerup");
 }
 
